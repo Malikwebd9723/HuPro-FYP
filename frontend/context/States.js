@@ -6,7 +6,7 @@ import { ToastAndroid } from "react-native";
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.10";
+    const homeHost = "192.168.10.8";
     const navigation = useNavigation();
 
     // all the states goes here
