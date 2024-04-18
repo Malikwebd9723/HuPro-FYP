@@ -224,3 +224,55 @@ app.post("/login",async(req,res)=>{
     }
 
 })
+
+// endpoint to get registered users
+app.get("/getRegisteredUsers",async(req,res)=>{
+    try {
+        const user = await User.find({userVerified:true});
+    
+        if (!user) {
+            return res.status(401).json({data:"No registered user found"})
+        }
+        else{
+            return res.status(200).json({data:user})
+        }
+    } catch (error) {
+        return res.status(500).json({data:error.message})
+    }
+
+})
+
+// endpoint to get applicant users
+app.get("/getApplicantUsers",async(req,res)=>{
+    try {
+        const user = await User.find({userVerified:false});
+    
+        if (!user) {
+            return res.status(401).json({data:"No registered user found"})
+        }
+        else{
+            return res.status(200).json({data:user})
+        }
+    } catch (error) {
+        return res.status(500).json({data:error.message})
+    }
+})
+
+// endpoint to get applicant users
+app.post("/registerSpecificUser",async(req,res)=>{
+    try {
+        const {id} = req.body;
+        const user = await User.findOne({_id:id});
+        
+        if (!user) {
+            return res.status(401).json({message:"No user found"})
+        }
+        else{
+            user.userVerified = true;
+            await user.save();
+            return res.status(200).json({message:"User registered succesfully"})
+        }
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+})

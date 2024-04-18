@@ -1,11 +1,18 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, FlatList, SafeAreaView } from "react-native";
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity, FlatList, SafeAreaView, ActivityIndicator, Alert } from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
-import { useState } from "react";
-
+import { useEffect, useState, useContext } from "react";
+import { Context } from "../../context/States";
 
 export default function UserData() {
+    const[loading,setLoading] = useState(true)
+    const context = useContext(Context);
+    const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers,registerSpecificUser } = context;
+    useEffect(() => {
+        getRegisteredUsers();
+        getApplicantUsers();
+        setLoading(false)
+    }, [])
     const theme = useTheme();
     const color = theme.text;
     const backgroundColor = theme.bg;
@@ -20,156 +27,50 @@ export default function UserData() {
     const handleCatToShow = (value) => {
         setCatToShow(value);
         setCatShow(!catShow);
-    }
+    };
 
-    const users = [
-        {
-            name: "malik usman",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "usman",
-            fathername: "mukhtar",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "malik",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "hesham",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-    ]
-    const applicants = [
-        {
-            name: "malik usman",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "usman",
-            fathername: "mukhtar",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "malik",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "hesham",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-    ]
-    const newlyRegistered = [
-        {
-            name: "malik usman",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "usman",
-            fathername: "mukhtar",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "malik",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-        {
-            name: "hesham",
-            fathername: "mukhtar ahmed",
-            roll: "302-20162",
-            department:"cs & it",
-            email: "malik9723usman@gmail.com",
-            cnic: '13503-9692587-9',
-            contact: "0336-4006048",
-            address: "muradpur tehsil and dist mansehra"
-        },
-    ]
+    const handleConfirm = (name, id) => {
+        Alert.alert(
+          'Confirmation',
+          `Are you sure you want to register ${name}`,
+          [
+            { text: 'No'},
+            { text: 'Yes', onPress: () => registerSpecificUser(id) },
+          ]
+        );
+      };
+
+
     const HeaderComponent = () => {
         return (
             <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>{catToShow.toUpperCase()}</Text>
         );
-      };
+    };
     const renderItem = ({ item }) => (
         <ScrollView>
+            {/* {loading?
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color={colorDark} />
+              </View>: */}
             <View style={[styles.boxContainer, { borderColor: boxbg }]}>
                 <View style={[styles.boxInner, { borderColor: navBg }]}>
-                    <Text style={[styles.h5, { color }]}>{item.name.toUpperCase()}</Text>
-                    <Text style={[styles.h6, { color }]}>{item.fathername.toUpperCase()}</Text>
-                    <Text style={[styles.h6, { color }]}>{item.roll}</Text>
-                    <Text style={[styles.h6, { color }]}>{item.department.toUpperCase()}</Text>
-                    <Text style={[styles.h6, { color }]}>{item.email}</Text>
-                    <Text style={[styles.h6, { color }]}>{item.cnic}</Text>
-                    <Text style={[styles.h6, { color }]}>{item.contact}</Text>
-                    <Text style={[styles.h6, { color }]}>{item.address}</Text>
+                    <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Father Name: </Text>{item.fathername.toUpperCase()}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Roll#: </Text>{item.roll}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Department: </Text>{item.department}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Email: </Text>{item.email}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>CNIC#: </Text>{item.cnic}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Contact# : </Text>{item.contact}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Address: </Text>{item.address}</Text>
+                    {catToShow=="applicants"?<Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Apply on: </Text>{item.createdAt.split("T")[0]}</Text>:""}
                     <View style={styles.btnContainer}>
+                        {catToShow == "applicants" ? <TouchableOpacity onPress={()=>{handleConfirm(item.fullname.toUpperCase(), item._id,)}} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Register</Text></TouchableOpacity> : ""}
+
                         <TouchableOpacity style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
                     </View>
                 </View>
             </View>
+{/* } */}
         </ScrollView>
     );
     return (
@@ -187,39 +88,31 @@ export default function UserData() {
             {/* select content of category section */}
             {catShow && <View style={styles.boxContainer}>
                 <View style={[styles.boxInner, { borderColor: navBg }]}>
-                    <Text text="registered" onPress={() => handleCatToShow("registered")} style={[styles.h6, { color, marginVertical: 5 }]}>Registered</Text>
-                    <Text onPress={() => handleCatToShow("newly registered")} style={[styles.h6, { color, marginVertical: 5 }]}>Newly Registered</Text>
-                    <Text onPress={() => handleCatToShow("applicant")} style={[styles.h6, { color, marginVertical: 5 }]}>Applicant</Text>
+                    <Text text="registered" onPress={() => handleCatToShow("registered")}
+                        style={[styles.h6, { color, marginVertical: 5 }]}>Registered</Text>
+
+                    <Text onPress={() => handleCatToShow("applicants")} style={[styles.h6, { color, marginVertical: 5 }]}>Applicants</Text>
                 </View>
             </View>}
 
 
             {/* display the registered proctors list */}
             {catToShow == "registered" ?
-                    <FlatList
-                        data={users}
-                        renderItem={renderItem}
-                        ListHeaderComponent={<HeaderComponent/>} // Pass the header component here
-                    />
-                 : ""}
-
-
-            {/* display the list of newly registered proctors */}
-            {catToShow == "newly registered" ?
                 <FlatList
-                data={newlyRegistered}
-                renderItem={renderItem}
-                ListHeaderComponent={<HeaderComponent/>} // Pass the header component here
-            /> : ""}
+                    data={registeredUsers}
+                    renderItem={renderItem}
+                    ListHeaderComponent={<HeaderComponent />} // Pass the header component here
+                />
+                : ""}
 
 
-            {/* display the list of newly registered proctors */}
-            {catToShow == "applicant" ?
+            {/* display the list of applicant proctors */}
+            {catToShow == "applicants" ?
                 <FlatList
-                data={applicants}
-                renderItem={renderItem}
-                ListHeaderComponent={<HeaderComponent/>} // Pass the header component here
-            /> : ""}
+                    data={applicantUsers}
+                    renderItem={renderItem}
+                    ListHeaderComponent={<HeaderComponent />} // Pass the header component here
+                /> : ""}
 
         </View>
     )
@@ -227,13 +120,13 @@ export default function UserData() {
 
 
 const styles = StyleSheet.create({
-    mainContainer: { padding: 10,paddingBottom:"32%"},
-    cat: {padding: 10, marginVertical: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "center", width: "50%" },
+    mainContainer: { padding: 10, paddingBottom: "32%" },
+    cat: { padding: 10, marginVertical: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "center", width: "50%" },
     catText: { fontSize: 15, fontWeight: "500" },
     h2: { fontSize: 25, fontWeight: "400" },
-    sectionTwo: {marginVertical: 10, padding: 10, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+    sectionTwo: { marginVertical: 10, padding: 10, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     h3: { fontSize: 20, paddingVertical: 10, textAlign: "center", borderTopLeftRadius: 10, borderTopRightRadius: 10 },
-    boxContainer: { flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-around"},
+    boxContainer: { flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-around" },
     boxInner: { width: "100%", justifyContent: "center", padding: 10, margin: 10, borderWidth: 1, borderRadius: 10 },
     h5: { fontSize: 18, padding: 5, fontWeight: "600" },
     h6: { fontSize: 13, padding: 5, fontWeight: "300" },

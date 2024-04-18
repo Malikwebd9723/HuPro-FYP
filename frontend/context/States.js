@@ -6,11 +6,13 @@ import { ToastAndroid } from "react-native";
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.8";
+    const homeHost = "192.168.10.4";
     const navigation = useNavigation();
 
     // all the states goes here
-    const [notificationData, setNotificationData] = useState([])
+    const [notificationData, setNotificationData] = useState([]);
+    const [registeredUsers, setRegisteredUsers] = useState([]);
+    const [applicantUsers, setApplicantUsers] = useState([]);
 
     // check the user login status
     const loggedInStatus = async () => {
@@ -26,7 +28,7 @@ const States = ({ children }) => {
     }
 
     // login Route for any user
-    const handleLogin = async ({roll, password}) => {
+    const handleLogin = async ({ roll, password }) => {
         try {
             const response = await fetch(`http://${homeHost}:8001/login`, {
                 method: "POST",
@@ -38,7 +40,7 @@ const States = ({ children }) => {
             const json = await response.json();
             if (json.success) {
                 const token = json.token;
-                const privilege =json.privilege;
+                const privilege = json.privilege;
                 await AsyncStorage.setItem("authToken", token);
                 await AsyncStorage.setItem("privilege", privilege);
                 navigation.navigate(privilege);
@@ -63,8 +65,49 @@ const States = ({ children }) => {
             ToastAndroid.show("Error while fetching notification", ToastAndroid.LONG)
         }
     }
+
+    // get all the registered users
+    const getRegisteredUsers = async () => {
+        try {
+            const response = await fetch(`http://${homeHost}:8001/getRegisteredUsers`)
+            const json = await response.json();
+            setRegisteredUsers(json.data);
+        } catch (error) {
+            ToastAndroid.show("Error while fetching registered users", ToastAndroid.LONG)
+        }
+    }
+
+    // get all the registered users
+    const getApplicantUsers = async () => {
+        try {
+            const response = await fetch(`http://${homeHost}:8001/getApplicantUsers`)
+            const json = await response.json();
+            setApplicantUsers(json.data);
+        } catch (error) {
+            ToastAndroid.show("Error while fetching applicants", ToastAndroid.LONG)
+        }
+    }
+
+        // register a specific user
+        const registerSpecificUser = async (id) => {
+            try {
+                const response = await fetch(`http://${homeHost}:8001/registerSpecificUser`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({id})
+                });               
+                const json = await response.json();
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+                getRegisteredUsers();
+                getApplicantUsers();
+            } catch (error) {
+                ToastAndroid.show("Error while register user", ToastAndroid.LONG)
+            }
+        }
     return (
-        <Context.Provider value={{ loggedInStatus,handleLogin, handleGetNotification,notificationData}}>
+        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers,registeredUsers, getApplicantUsers,applicantUsers, registerSpecificUser }}>
             {children}
         </Context.Provider>
     );
