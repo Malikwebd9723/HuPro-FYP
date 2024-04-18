@@ -276,3 +276,20 @@ app.post("/registerSpecificUser",async(req,res)=>{
         return res.status(500).json({message:error.message})
     }
 })
+
+// endpoint to get applicant users
+app.delete("/deleteSpecificUser",async(req,res)=>{
+    try {
+        const {id} = req.body;
+        const user = await User.deleteOne({_id:id});
+        
+        if (!user) {
+            return res.status(401).json({message:"No user found"})
+        }
+        else{
+            return res.status(200).json({message:"User deleted succesfully"})
+        }
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+})

@@ -106,8 +106,27 @@ const States = ({ children }) => {
                 ToastAndroid.show("Error while register user", ToastAndroid.LONG)
             }
         }
+
+                // register a specific user
+                const deleteSpecificUser = async (id) => {
+                    try {
+                        const response = await fetch(`http://${homeHost}:8001/deleteSpecificUser`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({id})
+                        });               
+                        const json = await response.json();
+                        ToastAndroid.show(json.message, ToastAndroid.LONG)
+                        getRegisteredUsers();
+                        getApplicantUsers();
+                    } catch (error) {
+                        ToastAndroid.show("Error during deletion", ToastAndroid.LONG)
+                    }
+                }
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers,registeredUsers, getApplicantUsers,applicantUsers, registerSpecificUser }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers,registeredUsers, getApplicantUsers,applicantUsers, registerSpecificUser, deleteSpecificUser }}>
             {children}
         </Context.Provider>
     );

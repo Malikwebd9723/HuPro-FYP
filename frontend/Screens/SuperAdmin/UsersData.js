@@ -7,7 +7,7 @@ import { Context } from "../../context/States";
 export default function UserData() {
     const[loading,setLoading] = useState(true)
     const context = useContext(Context);
-    const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers,registerSpecificUser } = context;
+    const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers,registerSpecificUser,deleteSpecificUser } = context;
     useEffect(() => {
         getRegisteredUsers();
         getApplicantUsers();
@@ -29,13 +29,24 @@ export default function UserData() {
         setCatShow(!catShow);
     };
 
-    const handleConfirm = (name, id) => {
+    const handleConfirmRegister = (name, id) => {
         Alert.alert(
           'Confirmation',
           `Are you sure you want to register ${name}`,
           [
             { text: 'No'},
             { text: 'Yes', onPress: () => registerSpecificUser(id) },
+          ]
+        );
+      };
+
+      const handleConfirmDelete = (name, id) => {
+        Alert.alert(
+          'Confirmation',
+          `Are you sure you want to delete ${name}`,
+          [
+            { text: 'No'},
+            { text: 'Yes', onPress: () => deleteSpecificUser(id) },
           ]
         );
       };
@@ -64,9 +75,9 @@ export default function UserData() {
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Address: </Text>{item.address}</Text>
                     {catToShow=="applicants"?<Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Apply on: </Text>{item.createdAt.split("T")[0]}</Text>:""}
                     <View style={styles.btnContainer}>
-                        {catToShow == "applicants" ? <TouchableOpacity onPress={()=>{handleConfirm(item.fullname.toUpperCase(), item._id,)}} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Register</Text></TouchableOpacity> : ""}
+                        {catToShow == "applicants" ? <TouchableOpacity onPress={()=>{handleConfirmRegister(item.fullname.toUpperCase(), item._id,)}} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Register</Text></TouchableOpacity> : ""}
 
-                        <TouchableOpacity style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{handleConfirmDelete(item.fullname.toUpperCase(),item._id)}} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
                     </View>
                 </View>
             </View>
