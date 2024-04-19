@@ -13,8 +13,8 @@ const States = ({ children }) => {
     const [notificationData, setNotificationData] = useState([]);
     const [registeredUsers, setRegisteredUsers] = useState([]);
     const [applicantUsers, setApplicantUsers] = useState([]);
-
-
+    
+    
     // check the user login status
     const loggedInStatus = async () => {
         try {
@@ -129,7 +129,6 @@ const States = ({ children }) => {
 
     // search user function
     const searchUser = (text) => {
-
         if (text !== "") {
             const filtered = registeredUsers.filter((user) =>
                 user.roll.includes(text)
@@ -140,7 +139,7 @@ const States = ({ children }) => {
             getRegisteredUsers()
         )
     };
-    
+
     return (
         <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser }}>
             {children}

@@ -2,14 +2,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Modal, TextInput, ToastAndroid } from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
-import { useEffect, useState,useContext } from "react";
+import { useEffect, useState,useContext} from "react";
 import { Context } from "../../context/States";
 
 export default function SuperAdmin() {
     const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.10";
+    const homeHost = "192.168.10.11";
     const context = useContext(Context);
-    const {handleGetNotification,notificationData} = context;
+    const {handleGetNotification,notificationData, getRegisteredUsers,registeredUsers, getApplicantUsers,applicantUsers} = context;
     const theme = useTheme();
     const color = theme.text;
     const backgroundColor = theme.bg;
@@ -48,6 +48,8 @@ export default function SuperAdmin() {
     // fetch all the notification on start
     useEffect(() => {
         handleGetNotification();
+        getRegisteredUsers();
+        getApplicantUsers();
     }, [isModalVisible, message])
 
     // sending a notification to backend
@@ -136,24 +138,20 @@ export default function SuperAdmin() {
                     <Text style={{ color }}>Logout</Text>
                 </TouchableOpacity>
             </View>
-            <View>
+            <View >
                 <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>Protors Statistics</Text>
-                <View style={[styles.stateContainer, { borderColor: boxbg }]}>
-                    <View style={[styles.stateInner, { borderColor: navBg }]}>
+                <View style={[styles.stateInner, { borderColor: navBg }]}>
                         <Text style={[styles.h4, { color }]}>Total</Text>
-                        <Text style={[styles.h6, { color }]}>150</Text>
+                        <Text style={[styles.h6, { color }]}>{registeredUsers.length+applicantUsers.length}</Text>
                     </View>
+                <View style={styles.stateContainer}>
                     <View style={[styles.stateInner, { borderColor: navBg }]}>
                         <Text style={[styles.h4, { color }]}>Registered</Text>
-                        <Text style={[styles.h6, { color }]}>100</Text>
+                        <Text style={[styles.h6, { color }]}>{registeredUsers.length}</Text>
                     </View>
                     <View style={[styles.stateInner, { borderColor: navBg }]}>
-                        <Text style={[styles.h4, { color }]}>Newly Registered</Text>
-                        <Text style={[styles.h6, { color }]}>100</Text>
-                    </View>
-                    <View style={[styles.stateInner, { borderColor: navBg }]}>
-                        <Text style={[styles.h4, { color }]}>Applicant</Text>
-                        <Text style={[styles.h6, { color }]}>100</Text>
+                        <Text style={[styles.h4, { color }]}>Applicants</Text>
+                        <Text style={[styles.h6, { color }]}>{applicantUsers.length}</Text>
                     </View>
                 </View>
             </View>
@@ -194,11 +192,11 @@ const styles = StyleSheet.create({
     h2: { fontSize: 25, fontWeight: "500" },
     sectionTwo: { marginVertical: 10, padding: 10, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     h3: { fontSize: 20, paddingVertical: 10, textAlign: "center", borderTopLeftRadius: 10, borderTopRightRadius: 10 },
-    stateContainer: { flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-around", borderWidth: 0.5 },
-    stateInner: { width: "42%", alignItems: "center", justifyContent: "center", padding: 10, margin: 10, borderWidth: 1, borderRadius: 10 },
+    stateContainer: { flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-around"},
+    stateInner: { minWidth: "42%", alignItems: "center", justifyContent: "center", padding: 10, margin: 10, borderWidth: 1, borderRadius: 10 },
     h4: { fontSize: 18, padding: 5, fontWeight: "600" },
     h5: { fontSize: 15, padding: 10, fontWeight: "300",textAlign:"center"  },
-    h6: { fontSize: 13, padding: 5, fontWeight: "300", textAlign:"center" },
+    h6: { fontSize: 13, padding: 5, fontWeight: "300"},
     notificationContainer: { marginVertical: 20 },
     notification: { width: "100%", padding: 20, textAlign: "center", borderWidth: 0.5 },
     modal: { alignItems: "center", justifyContent: "center", flex: 3, borderRadius: 10, paddingTop: 20 },
