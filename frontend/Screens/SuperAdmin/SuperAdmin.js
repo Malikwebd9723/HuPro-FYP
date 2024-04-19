@@ -127,9 +127,9 @@ export default function SuperAdmin() {
                 </View>
                 <View style={styles.transparentContainer}></View>
             </Modal>
-
             {/* this is a TopNav pre built component */}
             <TopNav text="HuPro" />
+
 
             {/* starting the admin home screen */}
             <View style={styles.sectionTwo}>

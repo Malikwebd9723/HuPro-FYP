@@ -5,12 +5,14 @@ import { useState } from "react";
 
 export default function Login() {
     const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.14";
+    const homeHost = "192.168.10.11";
     const navigation = useNavigation();
+    const [selectedGender, setSelectedGender] = useState("");
     const [cred, setCred] = useState({
         fullname: "",
         fathername: "",
         email: "",
+        gender: "",
         roll: "",
         department: "",
         semester: "",
@@ -19,10 +21,10 @@ export default function Login() {
         contact: ""
     })
 
-    const { fullname, fathername, email, roll, department, semester, address, cnic, contact } = cred;
+    const { fullname, fathername, email, gender, roll, department, semester, address, cnic, contact } = cred;
 
     const validation = () => {
-        if (fullname && fathername && email && department && address && cnic && contact !== "") {
+        if (fullname && fathername && email && gender && department && address && cnic && contact !== "") {
             handleRegister();
         } else {
             ToastAndroid.show("Fill all the fields correctly!", ToastAndroid.LONG)
@@ -33,6 +35,7 @@ export default function Login() {
             fullname,
             fathername,
             email,
+            gender,
             roll,
             department,
             semester,
@@ -43,7 +46,7 @@ export default function Login() {
 
         try {
 
-            
+
             const response = await fetch(`http://${homeHost}:8001/register`, {
                 method: "POST",
                 headers: {
@@ -57,6 +60,7 @@ export default function Login() {
                     fullname: "",
                     fathername: "",
                     email: "",
+                    gender: "",
                     roll: "",
                     department: "",
                     semester: "",
@@ -67,7 +71,7 @@ export default function Login() {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             } else {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
-               
+
             }
 
         } catch (error) {
@@ -75,6 +79,10 @@ export default function Login() {
         }
     }
 
+    const handleGender = (value) => {
+        setSelectedGender(value);
+        setCred(({ ...cred, gender: value }))
+    }
     return (
         <>
             <View style={styles.firstContainer}>
@@ -95,6 +103,13 @@ export default function Login() {
 
                         <Text>Email Address</Text>
                         <TextInput value={cred.email} onChangeText={(text) => setCred(({ ...cred, email: text }))} style={styles.input} placeholder="Email address" keyboardType="email-address" />
+
+                        <Text>Select Gender</Text>
+                        <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%", padding: 10 }}>
+                            <Text style={{ backgroundColor: selectedGender == "male" ? "grey" : "white", padding: 10, borderRadius: 10 }} onPress={() => handleGender("male")}>Male</Text>
+                            <Text style={{ backgroundColor: selectedGender == "female" ? "grey" : "white", padding: 10, borderRadius: 10 }} onPress={() => handleGender("female")}>Female</Text>
+                            <Text style={{ backgroundColor: selectedGender == "other" ? "grey" : "white", padding: 10, borderRadius: 10 }} onPress={() => handleGender("other")}>Other</Text>
+                        </View>
 
                         <Text>Roll No# (optional for faculty)</Text>
                         <TextInput value={cred.roll} onChangeText={(text) => setCred(({ ...cred, roll: text }))} style={styles.input} placeholder="Roll no" keyboardType="numeric" />
@@ -132,11 +147,11 @@ export default function Login() {
 };
 
 const styles = StyleSheet.create({
-    firstContainer: {paddingVertical: 50, borderBottomWidth: 1, borderRadius: 20 },
+    firstContainer: { paddingVertical: 50, borderBottomWidth: 1, borderRadius: 20 },
     h1: { textAlign: "center", fontSize: 35, fontWeight: "900" },
     h2: { textAlign: "center", fontSize: 20, fontWeight: "400" },
     secondContainer: { alignItems: "center", gap: 10, paddingVertical: 30 },
-    text:{color:"orange"},
+    text: { color: "orange" },
     input: { borderWidth: 1, borderRadius: 10, width: "80%", padding: 10, fontSize: 15 },
     loginBtn: { backgroundColor: "green", padding: 15, borderRadius: 10, width: "30%", alignItems: "center" },
     loginBtnText: { fontSize: 15 },

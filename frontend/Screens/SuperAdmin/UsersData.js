@@ -1,17 +1,15 @@
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, FlatList, SafeAreaView, ActivityIndicator, Alert, TextInput, VirtualizedList } from "react-native";
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity, FlatList, Alert, TextInput, VirtualizedList } from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
 import { useEffect, useState, useContext } from "react";
 import { Context } from "../../context/States";
 
 export default function UserData() {
-    const[loading,setLoading] = useState(true)
     const context = useContext(Context);
-    const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers,registerSpecificUser,deleteSpecificUser, searchUser} = context;
+    const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser } = context;
     useEffect(() => {
         getRegisteredUsers();
         getApplicantUsers();
-        setLoading(false)
     }, [])
     const theme = useTheme();
     const color = theme.text;
@@ -31,25 +29,25 @@ export default function UserData() {
 
     const handleConfirmRegister = (name, id) => {
         Alert.alert(
-          'Confirmation',
-          `Are you sure you want to register ${name}`,
-          [
-            { text: 'No'},
-            { text: 'Yes', onPress: () => registerSpecificUser(id) },
-          ]
+            'Confirmation',
+            `Are you sure you want to register ${name}`,
+            [
+                { text: 'No' },
+                { text: 'Yes', onPress: () => registerSpecificUser(id) },
+            ]
         );
-      };
+    };
 
-      const handleConfirmDelete = (name, id) => {
+    const handleConfirmDelete = (name, id) => {
         Alert.alert(
-          'Confirmation',
-          `Are you sure you want to delete ${name}`,
-          [
-            { text: 'No'},
-            { text: 'Yes', onPress: () => deleteSpecificUser(id) },
-          ]
+            'Confirmation',
+            `Are you sure you want to delete ${name}`,
+            [
+                { text: 'No' },
+                { text: 'Yes', onPress: () => deleteSpecificUser(id) },
+            ]
         );
-      };
+    };
 
 
     const HeaderComponent = () => {
@@ -59,29 +57,25 @@ export default function UserData() {
     };
     const renderItem = ({ item }) => (
         <ScrollView>
-            {/* {loading?
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color={colorDark} />
-              </View>: */}
             <View style={[styles.boxContainer, { borderColor: boxbg }]}>
                 <View style={[styles.boxInner, { borderColor: navBg }]}>
                     <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Father Name: </Text>{item.fathername.toUpperCase()}</Text>
+                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Gender: </Text>{item.gender}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Roll#: </Text>{item.roll}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Department: </Text>{item.department}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Email: </Text>{item.email}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>CNIC#: </Text>{item.cnic}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Contact# : </Text>{item.contact}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Address: </Text>{item.address}</Text>
-                    {catToShow=="applicants"?<Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Apply on: </Text>{item.createdAt.split("T")[0]}</Text>:""}
+                    {catToShow == "applicants" ? <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Apply on: </Text>{item.createdAt.split("T")[0]}</Text> : ""}
                     <View style={styles.btnContainer}>
-                        {catToShow == "applicants" ? <TouchableOpacity onPress={()=>{handleConfirmRegister(item.fullname.toUpperCase(), item._id,)}} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Register</Text></TouchableOpacity> : ""}
+                        {catToShow == "applicants" ? <TouchableOpacity onPress={() => { handleConfirmRegister(item.fullname.toUpperCase(), item._id,) }} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Register</Text></TouchableOpacity> : ""}
 
-                        <TouchableOpacity onPress={()=>{handleConfirmDelete(item.fullname.toUpperCase(),item._id)}} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => { handleConfirmDelete(item.fullname.toUpperCase(), item._id) }} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
                     </View>
                 </View>
             </View>
-{/* } */}
         </ScrollView>
     );
     return (
@@ -93,11 +87,11 @@ export default function UserData() {
 
 
             {/* button to select the category to show */}
-            <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-            <TouchableOpacity onPress={handleCat} style={[styles.cat, { borderColor: navBg }]}><Text style={[styles.catText, { color }]}>Select Category</Text><Text style={[styles.catText, { color, fontSize: 20 }]}>{catShow ? "▼" : "▶"} </Text></TouchableOpacity>
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <TouchableOpacity onPress={handleCat} style={[styles.cat, { borderColor: navBg }]}><Text style={[styles.catText, { color }]}>Select Category</Text><Text style={[styles.catText, { color, fontSize: 20 }]}>{catShow ? "▼" : "▶"} </Text></TouchableOpacity>
 
-            {catToShow=="registered"?
-            <TextInput keyboardType="numeric" onChangeText={(text)=>{searchUser(text)}} placeholderTextColor={colorDark} placeholder="Search user by roll#" style={{backgroundColor:boxbg, color:colorDark, borderRadius:10,marginVertical:10, paddingHorizontal:15}}></TextInput>:""}
+                {catToShow == "registered" ?
+                    <TextInput keyboardType="numeric" onChangeText={(text) => { searchUser(text) }} placeholderTextColor={colorDark} placeholder="Search user by roll#" style={{ backgroundColor: boxbg, color: colorDark, borderRadius: 10, marginVertical: 10, paddingHorizontal: 15 }}></TextInput> : ""}
             </View>
 
             {/* select content of category section */}
@@ -113,23 +107,26 @@ export default function UserData() {
 
             {/* display the registered proctors list */}
             {catToShow == "registered" ?
-            <>
                 <FlatList
                     data={registeredUsers}
                     renderItem={renderItem}
-                    ListHeaderComponent={<HeaderComponent />} // Pass the header component here
+                    ListHeaderComponent={<HeaderComponent />}
+                    ListEmptyComponent={() => (
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={{ color }}>No registered users!</Text>
+                        </View>
+                    )}
                 />
-                </>
-                : ""}
-
-
-            {/* display the list of applicant proctors */}
-            {catToShow == "applicants" ?
-                <FlatList
+                : <FlatList
                     data={applicantUsers}
                     renderItem={renderItem}
-                    ListHeaderComponent={<HeaderComponent />} // Pass the header component here
-                /> : ""}
+                    ListHeaderComponent={<HeaderComponent />}
+                    ListEmptyComponent={() => (
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={{ color }}>No applicants to display!</Text>
+                        </View>
+                    )}
+                />}
         </View>
     )
 };

@@ -115,7 +115,7 @@ app.post("/deleteNotification",async(req,res)=>{
 //endpoint to register user
 app.post("/register", async (req, res) => {
     try {
-        const { fullname, fathername, email, roll = 0, department, semester = 0, address, cnic, contact } = req.body;
+        const { fullname, fathername, email, gender, dutyPlace, roll = 0, department, semester = 0, address, cnic, contact } = req.body;
         
         // Check if user already exists based on email or roll
         const existingUser = await User.findOne({ $or: [{ email }, { roll }] })
@@ -128,7 +128,7 @@ app.post("/register", async (req, res) => {
             const verificationToken = await crypto.randomBytes(20).toString("hex");
 
             // Create a new user document
-            const newUser = await new User({ fullname, fathername, email, roll, department, semester, address, cnic, contact, verificationToken });
+            const newUser = await new User({ fullname, fathername, email, gender, roll,dutyPlace, department, semester, address, cnic, contact, verificationToken });
 
             // Save the new user to the database
             await newUser.save();

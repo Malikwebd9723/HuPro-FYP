@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  gender: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
@@ -44,6 +48,10 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   password: {
+    type: String,
+    default:"",
+  },
+  dutyPlace: {
     type: String,
     default:"",
   },
