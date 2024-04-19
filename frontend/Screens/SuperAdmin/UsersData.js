@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, FlatList, SafeAreaView, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity, FlatList, SafeAreaView, ActivityIndicator, Alert, TextInput, VirtualizedList } from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
 import { useEffect, useState, useContext } from "react";
@@ -7,7 +7,7 @@ import { Context } from "../../context/States";
 export default function UserData() {
     const[loading,setLoading] = useState(true)
     const context = useContext(Context);
-    const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers,registerSpecificUser,deleteSpecificUser } = context;
+    const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers,registerSpecificUser,deleteSpecificUser, searchUser} = context;
     useEffect(() => {
         getRegisteredUsers();
         getApplicantUsers();
@@ -93,8 +93,12 @@ export default function UserData() {
 
 
             {/* button to select the category to show */}
+            <View style={{flexDirection:"row", justifyContent:"space-between"}}>
             <TouchableOpacity onPress={handleCat} style={[styles.cat, { borderColor: navBg }]}><Text style={[styles.catText, { color }]}>Select Category</Text><Text style={[styles.catText, { color, fontSize: 20 }]}>{catShow ? "▼" : "▶"} </Text></TouchableOpacity>
 
+            {catToShow=="registered"?
+            <TextInput keyboardType="numeric" onChangeText={(text)=>{searchUser(text)}} placeholderTextColor={colorDark} placeholder="Search user by roll#" style={{backgroundColor:boxbg, color:colorDark, borderRadius:10,marginVertical:10, paddingHorizontal:15}}></TextInput>:""}
+            </View>
 
             {/* select content of category section */}
             {catShow && <View style={styles.boxContainer}>
@@ -109,11 +113,13 @@ export default function UserData() {
 
             {/* display the registered proctors list */}
             {catToShow == "registered" ?
+            <>
                 <FlatList
                     data={registeredUsers}
                     renderItem={renderItem}
                     ListHeaderComponent={<HeaderComponent />} // Pass the header component here
                 />
+                </>
                 : ""}
 
 
@@ -124,7 +130,6 @@ export default function UserData() {
                     renderItem={renderItem}
                     ListHeaderComponent={<HeaderComponent />} // Pass the header component here
                 /> : ""}
-
         </View>
     )
 };

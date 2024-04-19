@@ -6,13 +6,14 @@ import { ToastAndroid } from "react-native";
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.4";
+    const homeHost = "192.168.10.11";
     const navigation = useNavigation();
 
     // all the states goes here
     const [notificationData, setNotificationData] = useState([]);
     const [registeredUsers, setRegisteredUsers] = useState([]);
     const [applicantUsers, setApplicantUsers] = useState([]);
+
 
     // check the user login status
     const loggedInStatus = async () => {
@@ -88,45 +89,60 @@ const States = ({ children }) => {
         }
     }
 
-        // register a specific user
-        const registerSpecificUser = async (id) => {
-            try {
-                const response = await fetch(`http://${homeHost}:8001/registerSpecificUser`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({id})
-                });               
-                const json = await response.json();
-                ToastAndroid.show(json.message, ToastAndroid.LONG)
-                getRegisteredUsers();
-                getApplicantUsers();
-            } catch (error) {
-                ToastAndroid.show("Error while register user", ToastAndroid.LONG)
-            }
+    // register a specific user
+    const registerSpecificUser = async (id) => {
+        try {
+            const response = await fetch(`http://${homeHost}:8001/registerSpecificUser`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id })
+            });
+            const json = await response.json();
+            ToastAndroid.show(json.message, ToastAndroid.LONG)
+            getRegisteredUsers();
+            getApplicantUsers();
+        } catch (error) {
+            ToastAndroid.show("Error while register user", ToastAndroid.LONG)
         }
+    }
 
-                // register a specific user
-                const deleteSpecificUser = async (id) => {
-                    try {
-                        const response = await fetch(`http://${homeHost}:8001/deleteSpecificUser`, {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({id})
-                        });               
-                        const json = await response.json();
-                        ToastAndroid.show(json.message, ToastAndroid.LONG)
-                        getRegisteredUsers();
-                        getApplicantUsers();
-                    } catch (error) {
-                        ToastAndroid.show("Error during deletion", ToastAndroid.LONG)
-                    }
-                }
+    // register a specific user
+    const deleteSpecificUser = async (id) => {
+        try {
+            const response = await fetch(`http://${homeHost}:8001/deleteSpecificUser`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id })
+            });
+            const json = await response.json();
+            ToastAndroid.show(json.message, ToastAndroid.LONG)
+            getRegisteredUsers();
+            getApplicantUsers();
+        } catch (error) {
+            ToastAndroid.show("Error during deletion", ToastAndroid.LONG)
+        }
+    }
+
+    // search user function
+    const searchUser = (text) => {
+
+        if (text !== "") {
+            const filtered = registeredUsers.filter((user) =>
+                user.roll.includes(text)
+            );
+            setRegisteredUsers(filtered);
+        }
+        else (
+            getRegisteredUsers()
+        )
+    };
+    
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers,registeredUsers, getApplicantUsers,applicantUsers, registerSpecificUser, deleteSpecificUser }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser }}>
             {children}
         </Context.Provider>
     );
