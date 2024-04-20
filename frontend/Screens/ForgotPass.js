@@ -1,9 +1,15 @@
 import { StyleSheet, ScrollView, KeyboardAvoidingView, View, Text, TextInput, TouchableOpacity, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-
+import { useTheme } from "styled-components";
 
 export default function ForgotPass() {
+    const theme = useTheme();
+    const color = theme.text;
+    const backgroundColor = theme.bg;
+    const boxbg = theme.boxBg;
+    const navBg = theme.navBg;
+    const colorDark = theme.textDark;
     const[email,setEmail] = useState("")
     const navigation = useNavigation();
     const homeHost = "192.168.10.14";
@@ -31,17 +37,17 @@ export default function ForgotPass() {
     return (
         <>
             <ScrollView>
-                <View style={styles.firstContainer}>
-                    <Text style={styles.h1}>HuPro</Text>
+                <View style={[styles.firstContainer,{backgroundColor:navBg}]}>
+                    <Text style={[styles.h1,{color:colorDark}]}>HuPro</Text>
 
-                    <Text style={styles.h2}>Verify yourself</Text>
+                    <Text style={[styles.h2,{color:colorDark}]}>Verify yourself</Text>
                 </View>
 
                 <KeyboardAvoidingView >
                     <View style={styles.secondContainer}>
                         <Text style={styles.text}>To reset password your email should be verified by HuPro</Text>
 
-                        <TextInput style={styles.input} onChangeText={(text=>setEmail(text))} placeholder="Email Address" keyboardType="email-address" />
+                        <TextInput style={[styles.input,{backgroundColor:boxbg}]} onChangeText={(text=>setEmail(text))} placeholder="Email Address" keyboardType="email-address" />
 
                         <TouchableOpacity onPress={handlesubmit} style={styles.loginBtn}>
 

@@ -2,9 +2,16 @@ import { StyleSheet, ScrollView, KeyboardAvoidingView, View, Text, TextInput, To
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useContext } from "react";
 import { Context } from "../context/States";
+import { useTheme } from "styled-components";
 
 
 export default function Login() {
+    const theme = useTheme();
+    const color = theme.text;
+    const backgroundColor = theme.bg;
+    const boxbg = theme.boxBg;
+    const navBg = theme.navBg;
+    const colorDark = theme.textDark;
     const context = useContext(Context)
     const {loggedInStatus,handleLogin} = context;
     const navigation = useNavigation();
@@ -18,7 +25,7 @@ export default function Login() {
     return (
         <>
             <ScrollView>
-                <View style={styles.firstContainer}>
+                <View style={[styles.firstContainer,{backgroundColor:navBg}]}>
                     <Text style={styles.h1}>HuPro</Text>
 
                     <Text style={styles.h2}>Login to your Account</Text>
@@ -27,9 +34,9 @@ export default function Login() {
                 <KeyboardAvoidingView >
                     <View style={styles.secondContainer}>
 
-                        <TextInput style={styles.input} placeholder="Roll No" keyboardType="numeric" onChangeText={(text) => { setRoll(text) }} />
+                        <TextInput style={[styles.input,{backgroundColor:boxbg}]} placeholder="Roll No" keyboardType="numeric" onChangeText={(text) => { setRoll(text) }} />
 
-                        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(text) => { setPassword(text) }} />
+                        <TextInput style={[styles.input,{backgroundColor:boxbg}]} placeholder="Password" secureTextEntry={true} onChangeText={(text) => { setPassword(text) }} />
 
                         <TouchableOpacity onPress={()=>handleLogin({roll, password})} style={styles.loginBtn}>
 
@@ -57,7 +64,7 @@ const styles = StyleSheet.create({
     h1: { textAlign: "center", fontSize: 35, fontWeight: "900",color:"black" },
     h2: { textAlign: "center", fontSize: 20, fontWeight: "400",color:"black" },
     secondContainer: { alignItems: "center", gap: 30, paddingVertical: 30 },
-    input: { borderWidth: 1, borderRadius: 10, width: "80%", padding: 10, fontSize: 15,backgroundColor:"grey",color:"black" },
+    input: { borderWidth: 1, borderRadius: 10, width: "80%", padding: 10, fontSize: 15,color:"black" },
     loginBtn: { backgroundColor: "green", padding: 15, borderRadius: 10, width: "30%", alignItems: "center" },
     loginBtnText: { fontSize: 15 },
 })

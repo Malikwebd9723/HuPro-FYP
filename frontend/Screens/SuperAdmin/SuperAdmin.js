@@ -2,14 +2,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Modal, TextInput, ToastAndroid } from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
-import { useEffect, useState,useContext} from "react";
+import { useEffect, useState, useContext } from "react";
 import { Context } from "../../context/States";
 
 export default function SuperAdmin() {
     const uniHost = "172.26.160.1";
     const homeHost = "192.168.10.11";
     const context = useContext(Context);
-    const {handleGetNotification,notificationData, getRegisteredUsers,registeredUsers, getApplicantUsers,applicantUsers} = context;
+    const { handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers } = context;
     const theme = useTheme();
     const color = theme.text;
     const backgroundColor = theme.bg;
@@ -56,7 +56,7 @@ export default function SuperAdmin() {
     const type = catToShow;
     const handleSetNotification = async () => {
         try {
-            if (message!=="" && catToShow!=="") {
+            if (message !== "" && catToShow !== "") {
                 const response = await fetch(`http://${homeHost}:8001/setNotification`, {
                     method: "POST",
                     headers: {
@@ -71,11 +71,11 @@ export default function SuperAdmin() {
                 ToastAndroid.show("Fill all the fields", ToastAndroid.LONG);
             }
         } catch (error) {
-            ToastAndroid.show(json.message,ToastAndroid.LONG)
+            ToastAndroid.show(json.message, ToastAndroid.LONG)
             setIsModalVisible(!isModalVisible);
         }
     }
-    
+
     // delete notification from database
     const handleDeleteNotification = async (id) => {
         try {
@@ -94,95 +94,97 @@ export default function SuperAdmin() {
         }
     }
     return (
-        <ScrollView style={[styles.mainContainer, { backgroundColor }]}>
+        <View>
+            <ScrollView style={[styles.mainContainer, { backgroundColor }]}>
 
-            {/* the modal we will use to upate notification content */}
-            <Modal transparent animationType="fade" visible={isModalVisible}>
-                <View style={styles.transparentContainer}></View>
-                <View style={[styles.modal, { backgroundColor: navBg }]}>
-                    <Text style={styles.h2}>New Notification</Text>
-                    <Text style={{ color: "brown" }}>New notification will override the older one with same "Type"!</Text>
-                    <Text style={{ color: "brown" }}>Notification will be disappear after 24 hours!</Text>
-                    <ScrollView style={{ width: "100%" }}>
-                        <View style={[styles.modalContainer, { borderColor: boxbg }]}>
-                            {/* button to select the category to show */}
-                            <TouchableOpacity onPress={handleCat} style={[styles.cat, { backgroundColor }]}><Text style={[styles.catText, { color }]}>{catToShow.toUpperCase()}</Text><Text style={[styles.catText, { color, fontSize: 20 }]}>{catShow ? " ▼" : " ▶"} </Text></TouchableOpacity>
+                {/* the modal we will use to upate notification content */}
+                <Modal transparent animationType="fade" visible={isModalVisible}>
+                    <View style={styles.transparentContainer}></View>
+                    <View style={[styles.modal, { backgroundColor: navBg }]}>
+                        <Text style={styles.h2}>New Notification</Text>
+                        <Text style={{ color: "brown" }}>New notification will override the older one with same "Type"!</Text>
+                        <Text style={{ color: "brown" }}>Notification will be disappear after 24 hours!</Text>
+                        <ScrollView style={{ width: "100%" }}>
+                            <View style={[styles.modalContainer, { borderColor: boxbg }]}>
+                                {/* button to select the category to show */}
+                                <TouchableOpacity onPress={handleCat} style={[styles.cat, { backgroundColor }]}><Text style={[styles.catText, { color }]}>{catToShow.toUpperCase()}</Text><Text style={[styles.catText, { color, fontSize: 20 }]}>{catShow ? " ▼" : " ▶"} </Text></TouchableOpacity>
 
-                            {/* select content of category section */}
-                            {catShow && <View style={[styles.boxContainer, { backgroundColor }]}>
-                                <View style={styles.boxInner}>
-                                    <Text onPress={() => handleCatToShow("urgent call")} style={[styles.h6, { color, marginVertical: 5 }]}>Urgent Call</Text>
-                                    <Text onPress={() => handleCatToShow("meeting")} style={[styles.h6, { color, marginVertical: 5 }]}>Meeting</Text>
-                                    <Text onPress={() => handleCatToShow("information")} style={[styles.h6, { color, marginVertical: 5 }]}>Information</Text>
-                                </View>
-                            </View>}
-                            <TextInput multiline value={message} onChangeText={(text) => setMessage(text)} style={[styles.notificationMesage, { color: colorDark }]} placeholder="Enter your message"></TextInput>
-                        </View>
-                    </ScrollView>
-                    <View style={styles.modalBtn}>
-                        <TouchableOpacity style={[styles.closeModalBtn, { backgroundColor, color }]} onPress={() => { setIsModalVisible(!isModalVisible) }}><Text style={[styles.closeModalBtnText, { color }]}>Close</Text></TouchableOpacity>
-
-                        <TouchableOpacity style={[styles.closeModalBtn, { backgroundColor, color }]} onPress={() => handleSetNotification()}><Text style={[styles.closeModalBtnText, { color }]}>Send</Text></TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.transparentContainer}></View>
-            </Modal>
-            {/* this is a TopNav pre built component */}
-            <TopNav text="HuPro" />
-
-
-            {/* starting the admin home screen */}
-            <View style={styles.sectionTwo}>
-                <Text style={[styles.h2, { color }]}>Hello Admin</Text>
-                <TouchableOpacity onPress={() => AsyncStorage.clear()}>
-                    <Text style={{ color }}>Logout</Text>
-                </TouchableOpacity>
-            </View>
-            <View >
-                <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>Protors Statistics</Text>
-                <View style={[styles.stateInner, { borderColor: navBg }]}>
-                        <Text style={[styles.h4, { color }]}>Total</Text>
-                        <Text style={[styles.h6, { color }]}>{registeredUsers.length+applicantUsers.length}</Text>
-                    </View>
-                <View style={styles.stateContainer}>
-                    <View style={[styles.stateInner, { borderColor: navBg }]}>
-                        <Text style={[styles.h4, { color }]}>Registered</Text>
-                        <Text style={[styles.h6, { color }]}>{registeredUsers.length}</Text>
-                    </View>
-                    <View style={[styles.stateInner, { borderColor: navBg }]}>
-                        <Text style={[styles.h4, { color }]}>Applicants</Text>
-                        <Text style={[styles.h6, { color }]}>{applicantUsers.length}</Text>
-                    </View>
-                </View>
-            </View>
-
-            {/* box where we show all the notification content */}
-            <View style={styles.notificationContainer}>
-
-                <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>New Notification</Text>
-                <Text onPress={addNotification} style={[styles.h5, { color: colorDark, backgroundColor: boxbg}]}>Add new</Text>
-
-                {notificationData.length !== 0 ? notificationData.map((item) => {
-                    return (
-
-                        <TouchableOpacity key={item.type} onPress={() => handleNotificationBox(item.type, item.message)} style={[styles.notification, { color, borderColor: navBg }]}>
-
-                            <View>
-                                <Text style={[styles.h4, { color }]}>{item.type.toUpperCase()}</Text>
-                                <Text style={[styles.h6, { color }]}>{item.message}</Text>
-                                <TouchableOpacity onPress={() => handleDeleteNotification(item._id)} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete</Text></TouchableOpacity>
+                                {/* select content of category section */}
+                                {catShow && <View style={[styles.boxContainer, { backgroundColor }]}>
+                                    <View style={styles.boxInner}>
+                                        <Text onPress={() => handleCatToShow("urgent call")} style={[styles.h6, { color, marginVertical: 5 }]}>Urgent Call</Text>
+                                        <Text onPress={() => handleCatToShow("meeting")} style={[styles.h6, { color, marginVertical: 5 }]}>Meeting</Text>
+                                        <Text onPress={() => handleCatToShow("information")} style={[styles.h6, { color, marginVertical: 5 }]}>Information</Text>
+                                    </View>
+                                </View>}
+                                <TextInput multiline value={message} onChangeText={(text) => setMessage(text)} style={[styles.notificationMesage, { color: colorDark }]} placeholder="Enter your message"></TextInput>
                             </View>
+                        </ScrollView>
+                        <View style={styles.modalBtn}>
+                            <TouchableOpacity style={[styles.closeModalBtn, { backgroundColor, color }]} onPress={() => { setIsModalVisible(!isModalVisible) }}><Text style={[styles.closeModalBtnText, { color }]}>Close</Text></TouchableOpacity>
 
-                        </TouchableOpacity>
-                    )
-                })
-                    :
-                    <TouchableOpacity onPress={() => setIsModalVisible(true)} style={[styles.notification, { color, borderColor: navBg }]}>
-                        <Text style={[styles.h6, { color }]}>No notification to show!</Text>
+                            <TouchableOpacity style={[styles.closeModalBtn, { backgroundColor, color }]} onPress={() => handleSetNotification()}><Text style={[styles.closeModalBtnText, { color }]}>Send</Text></TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.transparentContainer}></View>
+                </Modal>
+                {/* this is a TopNav pre built component */}
+                <TopNav text="HuPro" />
 
-                    </TouchableOpacity>}
-            </View>
-        </ScrollView>
+
+                {/* starting the admin home screen */}
+                <View style={styles.sectionTwo}>
+                    <Text style={[styles.h2, { color }]}>Hello Admin</Text>
+                    <TouchableOpacity onPress={() => AsyncStorage.clear()}>
+                        <Text style={{ color }}>Logout</Text>
+                    </TouchableOpacity>
+                </View>
+                <View >
+                    <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>Protors Statistics</Text>
+                    <View style={[styles.stateInner, { borderColor: navBg }]}>
+                        <Text style={[styles.h4, { color }]}>Total</Text>
+                        <Text style={[styles.h6, { color }]}>{registeredUsers.length + applicantUsers.length}</Text>
+                    </View>
+                    <View style={styles.stateContainer}>
+                        <View style={[styles.stateInner, { borderColor: navBg }]}>
+                            <Text style={[styles.h4, { color }]}>Registered</Text>
+                            <Text style={[styles.h6, { color }]}>{registeredUsers.length}</Text>
+                        </View>
+                        <View style={[styles.stateInner, { borderColor: navBg }]}>
+                            <Text style={[styles.h4, { color }]}>Applicants</Text>
+                            <Text style={[styles.h6, { color }]}>{applicantUsers.length}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                {/* box where we show all the notification content */}
+                <View style={styles.notificationContainer}>
+
+                    <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>New Notification</Text>
+                    <Text onPress={addNotification} style={[styles.h5, { color: colorDark, backgroundColor: boxbg }]}>Add new</Text>
+
+                    {notificationData.length !== 0 ? notificationData.map((item) => {
+                        return (
+
+                            <TouchableOpacity key={item.type} onPress={() => handleNotificationBox(item.type, item.message)} style={[styles.notification, { color, borderColor: navBg }]}>
+
+                                <View>
+                                    <Text style={[styles.h4, { color }]}>{item.type.toUpperCase()}</Text>
+                                    <Text style={[styles.h6, { color }]}>{item.message}</Text>
+                                    <TouchableOpacity onPress={() => handleDeleteNotification(item._id)} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete</Text></TouchableOpacity>
+                                </View>
+
+                            </TouchableOpacity>
+                        )
+                    })
+                        :
+                        <TouchableOpacity onPress={() => setIsModalVisible(true)} style={[styles.notification, { color, borderColor: navBg }]}>
+                            <Text style={[styles.h6, { color }]}>No notification to show!</Text>
+
+                        </TouchableOpacity>}
+                </View>
+            </ScrollView>
+        </View>
     )
 };
 
@@ -192,11 +194,11 @@ const styles = StyleSheet.create({
     h2: { fontSize: 25, fontWeight: "500" },
     sectionTwo: { marginVertical: 10, padding: 10, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     h3: { fontSize: 20, paddingVertical: 10, textAlign: "center", borderTopLeftRadius: 10, borderTopRightRadius: 10 },
-    stateContainer: { flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-around"},
+    stateContainer: { flexDirection: 'row', flexWrap: "wrap", justifyContent: "space-around" },
     stateInner: { minWidth: "42%", alignItems: "center", justifyContent: "center", padding: 10, margin: 10, borderWidth: 1, borderRadius: 10 },
     h4: { fontSize: 18, padding: 5, fontWeight: "600" },
-    h5: { fontSize: 15, padding: 10, fontWeight: "300",textAlign:"center"  },
-    h6: { fontSize: 13, padding: 5, fontWeight: "300"},
+    h5: { fontSize: 15, padding: 10, fontWeight: "300", textAlign: "center" },
+    h6: { fontSize: 13, padding: 5, fontWeight: "300" },
     notificationContainer: { marginVertical: 20 },
     notification: { width: "100%", padding: 20, textAlign: "center", borderWidth: 0.5 },
     modal: { alignItems: "center", justifyContent: "center", flex: 3, borderRadius: 10, paddingTop: 20 },

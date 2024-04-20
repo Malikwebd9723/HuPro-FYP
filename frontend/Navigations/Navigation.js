@@ -24,7 +24,7 @@ export default function StackNavigator() {
   const SuperAdminTabNavigator = () => {
     return (
 <States>
-      <Tab.Navigator screenOptions={{ tabBarStyle: { backgroundColor, color } }}>
+      <Tab.Navigator  screenOptions={{ tabBarStyle: { backgroundColor, color } }}>
         <Tab.Screen
           name="Home"
           component={SuperAdmin}

@@ -133,7 +133,7 @@ export default function UserData() {
 
 
 const styles = StyleSheet.create({
-    mainContainer: { padding: 10, paddingBottom: "32%" },
+    mainContainer: { padding: 10, paddingBottom: "32%",minHeight:"100%" },
     cat: { padding: 10, marginVertical: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "center", width: "50%" },
     catText: { fontSize: 15, fontWeight: "500" },
     h2: { fontSize: 25, fontWeight: "400" },
