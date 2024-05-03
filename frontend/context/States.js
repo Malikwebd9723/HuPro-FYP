@@ -13,6 +13,7 @@ const States = ({ children }) => {
     const [notificationData, setNotificationData] = useState([]);
     const [registeredUsers, setRegisteredUsers] = useState([]);
     const [applicantUsers, setApplicantUsers] = useState([]);
+    const [profileData,setProfileData] = useState([])
     
     
     // check the user login status
@@ -142,8 +143,23 @@ const States = ({ children }) => {
         )
     };
 
+    const getProfileData = async(id)=>{
+        try {
+            const response = await fetch(`http://${homeHost}:8001/profileData`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id })
+            });
+            const json = await response.json();
+            setProfileData(json.user[0])
+        } catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.LONG)
+        }
+    }
     return (
-        <Context.Provider value={{loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser }}>
+        <Context.Provider value={{loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData,profileData }}>
             {children}
         </Context.Provider>
     );

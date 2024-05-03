@@ -47,7 +47,7 @@ const handleSendEmail = async (email, subject, text) => {
             pass: "trgg ptmi yfsd osks",
         },
     });
-    
+
     // Compose the email message
     const mailOptions = {
         from: "HuPro",
@@ -55,7 +55,7 @@ const handleSendEmail = async (email, subject, text) => {
         subject: subject,
         text: text,
     };
-    
+
     // Send the email
     try {
         await transporter.sendMail(mailOptions);
@@ -67,48 +67,48 @@ const handleSendEmail = async (email, subject, text) => {
 
 // endpoint to set notification
 
-app.post("/setNotification", async(req,res)=>{
+app.post("/setNotification", async (req, res) => {
     try {
-        const {type,message} = req.body;
-        const notification = await Notification.findOne({type});
+        const { type, message } = req.body;
+        const notification = await Notification.findOne({ type });
         if (notification) {
             notification.message = message;
             await notification.save();
-            res.status(200).json({message:"Notification updated"})
+            res.status(200).json({ message: "Notification updated" })
         } else {
-            const newNotification = await new Notification({type,message})
+            const newNotification = await new Notification({ type, message })
             await newNotification.save();
-            res.status(200).json({message:"Notification created"})
+            res.status(200).json({ message: "Notification created" })
         }
     } catch (error) {
-        return res.status(500).json({message:"Apologize! Internal server error"})
+        return res.status(500).json({ message: "Apologize! Internal server error" })
     }
-    
+
 });
 
 // endpoint to get notification from db
-app.get("/getNotification", async(req,res)=>{
+app.get("/getNotification", async (req, res) => {
     try {
         const notification = await Notification.find();
         if (notification) {
             return res.status(200).json(notification)
         } else {
-            return res.status(200).json({message:"There is no new notification, Click to add new"})
+            return res.status(200).json({ message: "There is no new notification, Click to add new" })
         }
     } catch (error) {
-        return res.status(500).json({message:"Apologize! Internal server error"})
-        
+        return res.status(500).json({ message: "Apologize! Internal server error" })
+
     }
 });
 
 //endpoint to delete specific notification
-app.post("/deleteNotification",async(req,res)=>{
+app.post("/deleteNotification", async (req, res) => {
     try {
         const id = req.body.id;
-        await Notification.deleteOne({_id:id})
-        return res.status(200).json({message:"Notification deleted"})
+        await Notification.deleteOne({ _id: id })
+        return res.status(200).json({ message: "Notification deleted" })
     } catch (error) {
-        return res.status(500).json({message:"Apologize! Internal server error"})
+        return res.status(500).json({ message: "Apologize! Internal server error" })
     }
 })
 
@@ -116,10 +116,10 @@ app.post("/deleteNotification",async(req,res)=>{
 app.post("/register", async (req, res) => {
     try {
         const { fullname, fathername, email, gender, dutyPlace, roll = 0, department, semester = 0, address, cnic, contact } = req.body;
-        
+
         // Check if user already exists based on email or roll
         const existingUser = await User.findOne({ $or: [{ email }, { roll }] })
-        
+
         if (existingUser) {
             console.log("User already exists");
             return res.status(400).json({ message: "User already registered try another Email or Roll No" });
@@ -128,7 +128,7 @@ app.post("/register", async (req, res) => {
             const verificationToken = await crypto.randomBytes(20).toString("hex");
 
             // Create a new user document
-            const newUser = await new User({ fullname, fathername, email, gender, roll,dutyPlace, department, semester, address, cnic, contact, verificationToken });
+            const newUser = await new User({ fullname, fathername, email, gender, roll, dutyPlace, department, semester, address, cnic, contact, verificationToken });
 
             // Save the new user to the database
             await newUser.save();
@@ -185,7 +185,7 @@ app.post("/forgotpassword", async (req, res) => {
                 password += digits[Math.floor(Math.random() * digits.length)];
             }
             //send email for password reset and update
-        handleSendEmail(user.email, "Password reset from HuPro", `Roll no is ${user.roll}
+            handleSendEmail(user.email, "Password reset from HuPro", `Roll no is ${user.roll}
         Password is ${password.replace(/\s+/g, '')}`)
 
             user.password = password;
@@ -193,7 +193,7 @@ app.post("/forgotpassword", async (req, res) => {
 
             return res.status(200).json({ success: true, message: "Password reset succesfully, check your email" })
         } else {
-            return res.status(404).json({message:"Oops! No verified user found"})
+            return res.status(404).json({ message: "Oops! No verified user found" })
         }
     } catch (error) {
         console.log(error.message);
@@ -202,95 +202,105 @@ app.post("/forgotpassword", async (req, res) => {
 
 
 // endpoint for login user
-app.post("/login",async(req,res)=>{
+app.post("/login", async (req, res) => {
     try {
-        const{roll,password} = req.body;
-        const user = await User.findOne({roll});
-    
+        const { roll, password } = req.body;
+        const user = await User.findOne({ roll });
+
         if (!user) {
-            return res.status(401).json({message:"Wrong credentials"})
-        } 
-        else if(user.password !== password){
-            return res.status(401).json({message:"Invalid password"})
+            return res.status(401).json({ message: "Wrong credentials" })
         }
-        else{
+        else if (user.password !== password) {
+            return res.status(401).json({ message: "Invalid password" })
+        }
+        else {
             const SecretKey = process.env.SECRET_key;
-            const token = await jwt.sign({ userId: user._id },SecretKey);
+            const token = await jwt.sign({ userId: user._id }, SecretKey);
             const privilege = await user.privilege;
             const id = await user._id;
-            return res.status(200).json({success:true,privilege,token,id,message:"Logged in sucessfuly"})
+            return res.status(200).json({ success: true, privilege, token, id, message: "Logged in sucessfuly" })
         }
     } catch (error) {
-        return res.status(500).json({message:error.message})
+        return res.status(500).json({ message: error.message })
     }
 
 })
 
 // endpoint to get registered users
-app.get("/getRegisteredUsers",async(req,res)=>{
+app.get("/getRegisteredUsers", async (req, res) => {
     try {
-        const user = await User.find({userVerified:true});
-    
+        const user = await User.find({ userVerified: true });
+
         if (!user) {
-            return res.status(401).json({data:"No registered user found"})
+            return res.status(401).json({ data: "No registered user found" })
         }
-        else{
-            return res.status(200).json({data:user})
+        else {
+            return res.status(200).json({ data: user })
         }
     } catch (error) {
-        return res.status(500).json({data:error.message})
+        return res.status(500).json({ data: error.message })
     }
 
 })
 
 // endpoint to get applicant users
-app.get("/getApplicantUsers",async(req,res)=>{
+app.get("/getApplicantUsers", async (req, res) => {
     try {
-        const user = await User.find({userVerified:false});
-    
+        const user = await User.find({ userVerified: false });
+
         if (!user) {
-            return res.status(401).json({data:"No registered user found"})
+            return res.status(401).json({ data: "No registered user found" })
         }
-        else{
-            return res.status(200).json({data:user})
+        else {
+            return res.status(200).json({ data: user })
         }
     } catch (error) {
-        return res.status(500).json({data:error.message})
+        return res.status(500).json({ data: error.message })
     }
 })
 
 // endpoint to get applicant users
-app.post("/registerSpecificUser",async(req,res)=>{
+app.post("/registerSpecificUser", async (req, res) => {
     try {
-        const {id} = req.body;
-        const user = await User.findOne({_id:id});
-        
+        const { id } = req.body;
+        const user = await User.findOne({ _id: id });
+
         if (!user) {
-            return res.status(401).json({message:"No user found"})
+            return res.status(401).json({ message: "No user found" })
         }
-        else{
+        else {
             user.userVerified = true;
             await user.save();
-            return res.status(200).json({message:"User registered succesfully"})
+            return res.status(200).json({ message: "User registered succesfully" })
         }
     } catch (error) {
-        return res.status(500).json({message:error.message})
+        return res.status(500).json({ message: error.message })
     }
 })
 
 // endpoint to get applicant users
-app.delete("/deleteSpecificUser",async(req,res)=>{
+app.delete("/deleteSpecificUser", async (req, res) => {
     try {
-        const {id} = req.body;
-        const user = await User.deleteOne({_id:id});
-        
+        const { id } = req.body;
+        const user = await User.deleteOne({ _id: id });
+
         if (!user) {
-            return res.status(401).json({message:"No user found"})
+            return res.status(401).json({ message: "No user found" })
         }
-        else{
-            return res.status(200).json({message:"User deleted succesfully"})
+        else {
+            return res.status(200).json({ message: "User deleted succesfully" })
         }
     } catch (error) {
-        return res.status(500).json({message:error.message})
+        return res.status(500).json({ message: error.message })
+    }
+});
+
+app.post("/profileData", async (req, res) => {
+    try {
+        const { id } = req.body;
+        const user = await User.find({ _id: id });
+        return res.status(200).json({ user });
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
     }
 })

@@ -9,7 +9,7 @@ export default function SuperAdmin() {
     const uniHost = "172.26.160.1";
     const homeHost = "192.168.10.12";
     const context = useContext(Context);
-    const {handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers } = context;
+    const {handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers ,getProfileData} = context;
     const theme = useTheme();
     const color = theme.text;
     const backgroundColor = theme.bg;
@@ -49,6 +49,11 @@ export default function SuperAdmin() {
         handleGetNotification();
         getRegisteredUsers();
         getApplicantUsers();
+        const getId = async()=>{
+            const userId = await AsyncStorage.getItem("user");
+            getProfileData(userId);
+        }
+        getId();
     }, [isModalVisible, message])
 
     // sending a notification to backend
