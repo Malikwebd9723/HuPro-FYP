@@ -7,9 +7,9 @@ import { Context } from "../../context/States";
 
 export default function SuperAdmin() {
     const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.11";
+    const homeHost = "192.168.10.12";
     const context = useContext(Context);
-    const { handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers } = context;
+    const {handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers } = context;
     const theme = useTheme();
     const color = theme.text;
     const backgroundColor = theme.bg;
@@ -22,7 +22,6 @@ export default function SuperAdmin() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [catToShow, setCatToShow] = useState("")
     const [message, setMessage] = useState("");
-
 
     // show modal to add notification
     const addNotification = () => {
@@ -94,7 +93,7 @@ export default function SuperAdmin() {
         }
     }
     return (
-        <View>
+        <View style={{flex:1}}>
             <ScrollView style={[styles.mainContainer, { backgroundColor }]}>
 
                 {/* the modal we will use to upate notification content */}

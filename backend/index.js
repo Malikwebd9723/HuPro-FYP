@@ -214,10 +214,11 @@ app.post("/login",async(req,res)=>{
             return res.status(401).json({message:"Invalid password"})
         }
         else{
-            const SecretKey = process.env.SECRET_key
+            const SecretKey = process.env.SECRET_key;
             const token = await jwt.sign({ userId: user._id },SecretKey);
             const privilege = await user.privilege;
-            return res.status(200).json({success:true,privilege,token,message:"Logged in sucessfuly"})
+            const id = await user._id;
+            return res.status(200).json({success:true,privilege,token,id,message:"Logged in sucessfuly"})
         }
     } catch (error) {
         return res.status(500).json({message:error.message})

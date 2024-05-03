@@ -6,7 +6,7 @@ import { ToastAndroid } from "react-native";
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.11";
+    const homeHost = "192.168.10.12";
     const navigation = useNavigation();
 
     // all the states goes here
@@ -42,8 +42,10 @@ const States = ({ children }) => {
             if (json.success) {
                 const token = json.token;
                 const privilege = json.privilege;
+                const id = json.id;
                 await AsyncStorage.setItem("authToken", token);
                 await AsyncStorage.setItem("privilege", privilege);
+                await AsyncStorage.setItem("user",id);
                 navigation.navigate(privilege);
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
@@ -141,7 +143,7 @@ const States = ({ children }) => {
     };
 
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser }}>
+        <Context.Provider value={{loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser }}>
             {children}
         </Context.Provider>
     );
