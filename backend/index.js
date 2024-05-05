@@ -304,3 +304,27 @@ app.post("/profileData", async (req, res) => {
         return res.status(500).json({ message: error.message })
     }
 })
+
+app.post("/updateDetails",async (req,res)=>{
+    try {
+        const{id,fullname,fathername,roll,department,semester,address,cnic,contact} = req.body;
+        const user = await User.findOne({_id:id});
+        if (!user) {
+            return req.status(401).json({success:false, message:"Try another email!"})
+        } else {
+            user.fullname = fullname;
+            user.fathername = fathername;
+            user.roll = roll;
+            user.department = department;
+            user.semester = semester;
+            user.address = address;
+            user.cnic = cnic;
+            user.contact = contact;
+
+            await user.save();
+            return res.status(200).json({success:true, message: "Profile updated succesfully" })
+        }
+    } catch (error) {
+        
+    }
+})

@@ -13,9 +13,9 @@ const States = ({ children }) => {
     const [notificationData, setNotificationData] = useState([]);
     const [registeredUsers, setRegisteredUsers] = useState([]);
     const [applicantUsers, setApplicantUsers] = useState([]);
-    const [profileData,setProfileData] = useState([])
-    
-    
+    const [profileData, setProfileData] = useState([])
+
+
     // check the user login status
     const loggedInStatus = async () => {
         try {
@@ -46,7 +46,7 @@ const States = ({ children }) => {
                 const id = json.id;
                 await AsyncStorage.setItem("authToken", token);
                 await AsyncStorage.setItem("privilege", privilege);
-                await AsyncStorage.setItem("user",id);
+                await AsyncStorage.setItem("user", id);
                 navigation.navigate(privilege);
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
@@ -143,7 +143,7 @@ const States = ({ children }) => {
         )
     };
 
-    const getProfileData = async(id)=>{
+    const getProfileData = async (id) => {
         try {
             const response = await fetch(`http://${homeHost}:8001/profileData`, {
                 method: "POST",
@@ -158,8 +158,52 @@ const States = ({ children }) => {
             ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
     }
+
+
+    const handleUpdateuser = async (
+        {id,
+        fullname,
+        fathername,
+        roll,
+        department,
+        semester,
+        address,
+        cnic,
+        contact}) => {
+
+        try {
+
+
+            const response = await fetch(`http://${homeHost}:8001/updateDetails`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id,
+                    fullname,
+                    fathername,
+                    roll,
+                    department,
+                    semester,
+                    address, 
+                    cnic,
+                    contact})
+            });
+            const json = await response.json();
+            if (json.success == true) {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            } else {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+
+            }
+
+        } catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.LONG)
+        }
+    }
     return (
-        <Context.Provider value={{loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData,profileData }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser }}>
             {children}
         </Context.Provider>
     );
