@@ -139,9 +139,6 @@ export default function SuperAdmin() {
                 {/* starting the admin home screen */}
                 <View style={styles.sectionTwo}>
                     <Text style={[styles.h2, { color }]}>Hello Admin</Text>
-                    <TouchableOpacity onPress={() => AsyncStorage.clear()}>
-                        <Text style={{ color }}>Logout</Text>
-                    </TouchableOpacity>
                 </View>
                 <View >
                     <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>Protors Statistics</Text>

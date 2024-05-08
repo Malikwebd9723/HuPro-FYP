@@ -5,7 +5,7 @@ import { useTheme } from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/States";
 import { MaskedTextInput } from "react-native-mask-text";
-
+import AntDesign from "react-native-vector-icons/AntDesign"
 
 export default function Profile() {
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -131,7 +131,8 @@ export default function Profile() {
 
                 <View style={[styles.nameContainer]}>
                     <Text style={[styles.name, { color }]}>{profileData.fullname.toUpperCase()}</Text>
-                    <TouchableOpacity onPress={() => AsyncStorage.clear()}><Text style={[{ color }]}>LogOut</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => AsyncStorage.clear()}><Text style={[{ color, padding:10}]}><AntDesign name="logout" size={23} color={color}/></Text></TouchableOpacity>
+                    
                 </View>
 
                 {profileData.emailVerified == false ? <Text style={[{ color: "red", paddingBottom: 10 }]}>Your email is not verified, check your G-mail.</Text> : ""}
