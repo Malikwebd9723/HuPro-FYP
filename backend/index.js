@@ -325,6 +325,23 @@ app.post("/updateDetails",async (req,res)=>{
             return res.status(200).json({success:true, message: "Profile updated succesfully" })
         }
     } catch (error) {
-        
+        return res.status(500).json({success:false, message: "Internal server error!" })
+    }
+});
+
+app.post("/assignDuty",async (req,res)=>{
+    try {
+        const{id, duty} = req.body;
+        const user = await User.findOne({_id:id});
+        if (!user) {
+            return req.status(401).json({success:false, message:"Something went wrong!"})
+        } else {
+            user.dutyPlace = duty;
+            await user.save();
+            return res.status(200).json({success:true, message: "Duty assigned!" })
+        }
+    } catch (error) {
+        return res.status(500).json({success:false, message: "Internal server error!" })
+
     }
 })

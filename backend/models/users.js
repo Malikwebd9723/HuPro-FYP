@@ -55,6 +55,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default:"",
   },
+  attendance:{
+    type:String,
+    default:"",
+  },
   emailVerified:{
     type:Boolean,
     default:false,

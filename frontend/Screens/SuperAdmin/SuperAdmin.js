@@ -138,7 +138,7 @@ export default function SuperAdmin() {
 
                 {/* starting the admin home screen */}
                 <View style={styles.sectionTwo}>
-                    <Text style={[styles.h2, { color }]}>Hello Admin</Text>
+                    <Text style={[styles.h2, { color }]}>Hello Chief</Text>
                 </View>
                 <View >
                     <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>Protors Statistics</Text>

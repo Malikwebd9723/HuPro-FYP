@@ -59,6 +59,13 @@ const States = ({ children }) => {
         }
     }
 
+
+    // handling the logout
+
+    const handleLogOut = async()=>{
+        await AsyncStorage.clear();
+        navigation.navigate("Login");
+    }
     // get all the notification
     const handleGetNotification = async () => {
         try {
@@ -202,8 +209,28 @@ const States = ({ children }) => {
             ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
     }
+
+    const handleAssignDuty = async({id, duty})=>{
+        try {
+            const response = await fetch(`http://${homeHost}:8001/assignDuty`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id,duty})
+            });
+            const json = await response.json();
+            
+            if (json.success !== true) {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+
+        } catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.LONG)
+        }
+    }
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty }}>
             {children}
         </Context.Provider>
     );
