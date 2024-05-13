@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/cli": "^13.6.2",
+    "@react-native-community/geolocation": "^3.2.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/native-stack": "^6.9.25",
@@ -19,6 +20,8 @@
     "react": "18.2.0",
     "react-native": "0.73.6",
     "react-native-cli": "^2.0.1",
+    "react-native-geolocation-service": "^5.3.1",
+    "react-native-maps": "^1.15.1",
     "react-native-mask-text": "^0.14.2",
     "react-native-network-info": "^5.2.1",
     "react-native-public-ip": "^1.0.2",

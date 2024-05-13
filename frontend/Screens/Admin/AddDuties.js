@@ -10,6 +10,13 @@ export default function Duties() {
     const [duty, setDuty] = useState("");
     const context = useContext(Context);
     const { getRegisteredUsers, registeredUsers, handleAssignDuty } = context;
+
+    const fullDate = new Date();
+    const today = fullDate.getDate();
+    const month = fullDate.getMonth();
+    const year = fullDate.getFullYear();
+    const date = `${today},${month + 1},${year}`;
+
     useEffect(() => {
         setUsers(...users, registeredUsers.filter((user) => user.privilege == "User"));
     }, [])
@@ -45,9 +52,9 @@ export default function Duties() {
 
                         <Text style={[{ color, flex: 1 }]}>{item.roll}</Text>
 
-                        {item.attendance !== "" && item.attendance !== "absent" ?
-                            <Text style={{ color: "green", fontWeight: "500", flex: 1 }}>{item.attendance.toUpperCase()}</Text>
-                            : <Text style={{ color: "red", fontWeight: "500", flex: 1 }}>Absent</Text>}
+                        {item.lastattendance[0].date == "" || item.lastattendance[0].date !== date ?
+                            <Text style={{ color: "red", fontWeight: "500", flex: 1 }}>Absent</Text>:
+                            <Text style={{ color: "green", fontWeight: "500", flex: 1 }}>{item.lastattendance[0].status}</Text>}
                     </View>
 
                     <View style={styles.detailsContainer}>

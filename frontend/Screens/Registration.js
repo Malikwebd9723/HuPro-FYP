@@ -11,8 +11,8 @@ export default function Registration() {
     const boxbg = theme.boxBg;
     const navBg = theme.navBg;
     const colorDark = theme.textDark;
-    const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.11";
+    // const uniHost = "172.26.160.1";
+    const homeHost = "192.168.10.12";
     const navigation = useNavigation();
     const [selectedGender, setSelectedGender] = useState("");
     const [cred, setCred] = useState({

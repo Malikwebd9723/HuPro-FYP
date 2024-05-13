@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  privilege:{
-    type:String,
-    default:"User"
+  privilege: {
+    type: String,
+    default: "User"
   },
   fullname: {
     type: String,
@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
   },
   roll: {
     type: String,
-    default:0,
-    unique:true,
+    default: 0,
+    unique: true,
   },
   department: {
     type: String,
@@ -33,57 +33,61 @@ const userSchema = new mongoose.Schema({
   },
   semester: {
     type: String,
-    default:0,
+    default: 0,
   },
-  address:{
-    type:String,
+  address: {
+    type: String,
     required: true,
   },
   cnic: {
     type: String,
     required: true,
   },
-  contact:{
-    type:String,
+  contact: {
+    type: String,
     required: true,
   },
   password: {
     type: String,
-    default:"",
+    default: "",
   },
   dutyPlace: {
     type: String,
-    default:"",
+    default: "",
   },
-  attendance:{
-    type:String,
-    default:"",
+  lastattendance: {
+    type: Array,
+    default:[{status:"",date:""}]
   },
-  emailVerified:{
-    type:Boolean,
-    default:false,
+  attendance: {
+    type: Array,
+    default:[{status:"",date:""}]
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false,
   },
   userVerified: {
     type: Boolean,
     default: false,
   },
-  verificationToken:{
-    type:String,
-    default:"",
+  verificationToken: {
+    type: String,
+    default: "",
   },
 
-//   orders: [
-//     {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Order",
-//     },
-//   ],
+  //   orders: [
+  //     {
+  //       type: mongoose.Schema.Types.ObjectId,
+  //       ref: "Order",
+  //     },
+  //   ],
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const User = mongoose.model("User",userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User

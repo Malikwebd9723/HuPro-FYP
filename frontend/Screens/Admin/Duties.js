@@ -9,7 +9,7 @@ export default function Duties() {
     const context = useContext(Context);
     const {registeredUsers } = context;
     useEffect(() => {
-        setUsers(...users, registeredUsers.filter(user => user.dutyPlace !== "main gate" && user.dutyPlace !== "second gate" && user.dutyPlace !== "third gate"));
+        setUsers(...users, registeredUsers.filter(user => user.dutyPlace !== "main gate" && user.dutyPlace !== "second gate" && user.dutyPlace !== "third gate" && user.dutyPlace !== ""));
     }, []);
 
     const theme = useTheme();
