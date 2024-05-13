@@ -6,7 +6,8 @@ import { ToastAndroid } from "react-native";
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.12";
+    // const homeHost = "192.168.10.12";
+    const homeHost = "10.121.28.223";
     const navigation = useNavigation();
 
     // all the states goes here
@@ -66,6 +67,48 @@ const States = ({ children }) => {
         await AsyncStorage.clear();
         navigation.navigate("Login");
     }
+
+    const handleSetNotification = async (type,message) => {
+        try {
+            if (message !== "" && catToShow !== "") {
+                const response = await fetch(`http://${homeHost}:8001/setNotification`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ type, message })
+                });
+                const json = await response.json();
+                ToastAndroid.show(json.message, ToastAndroid.SHORT);
+                setIsModalVisible(!isModalVisible);
+            } else {
+                ToastAndroid.show("Fill all the fields", ToastAndroid.LONG);
+            }
+        } catch (error) {
+            ToastAndroid.show(json.message, ToastAndroid.LONG)
+            setIsModalVisible(!isModalVisible);
+        }
+    }
+
+
+        // delete notification from database
+        const handleDeleteNotification = async (id) => {
+            try {
+                const response = await fetch(`http://${homeHost}:8001/deleteNotification`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id })
+                });
+                setMessage(id)
+                const json = await response.json();
+                ToastAndroid.show(json.message, ToastAndroid.LONG);
+            } catch (error) {
+                ToastAndroid.show("Error deleting notification", ToastAndroid.LONG)
+            }
+        }
+
     // get all the notification
     const handleGetNotification = async () => {
         try {
@@ -230,7 +273,7 @@ const States = ({ children }) => {
         }
     }
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty }}>
             {children}
         </Context.Provider>
     );
