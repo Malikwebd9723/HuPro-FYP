@@ -204,8 +204,8 @@ app.post("/forgotpassword", async (req, res) => {
 // endpoint for login user
 app.post("/login", async (req, res) => {
     try {
-        const { roll, password } = req.body;
-        const user = await User.findOne({ roll });
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res.status(401).json({ message: "Wrong credentials" })
@@ -334,7 +334,7 @@ app.post("/assignDuty",async (req,res)=>{
         const{id, duty} = req.body;
         const user = await User.findOne({_id:id});
         if (!user) {
-            return req.status(401).json({success:false, message:"Something went wrong!"})
+            return res.status(401).json({success:false, message:"Something went wrong!"})
         } else {
             user.dutyPlace = duty;
             await user.save();
@@ -342,6 +342,40 @@ app.post("/assignDuty",async (req,res)=>{
         }
     } catch (error) {
         return res.status(500).json({success:false, message: "Internal server error!" })
+
+    }
+})
+
+app.post("/checkIn",async (req,res)=>{
+    try {
+        const{id, date,latitude,longitude} = req.body;
+        const user = await User.findOne({_id:id});
+        if (!user) {
+            return res.status(401).json({success:false, message:"Something went wrong!"})
+        } else {
+            await user.updateOne({$set:{checkIn:{date,latitude,longitude}} })
+            await user.save();
+            return res.status(200).json({success:true, message: "CheckedIn Successfully!" })
+        }
+    } catch (error) {
+        return res.status(500).json({success:false, message: error.message })
+
+    }
+})
+
+app.post("/checkOut",async (req,res)=>{
+    try {
+        const{id, date,latitude,longitude} = req.body;
+        const user = await User.findOne({_id:id});
+        if (!user && user.checkIn == user.checkOut) {
+            return res.status(401).json({success:false, message:"Something went wrong!"})
+        } else {
+            await user.updateOne({$set:{checkOut:{date,latitude,longitude}} })
+            await user.save();
+            return res.status(200).json({success:true, message: "CheckedOut Successfully!" })
+        }
+    } catch (error) {
+        return res.status(500).json({success:false, message: error.message })
 
     }
 })

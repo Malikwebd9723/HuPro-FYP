@@ -52,7 +52,6 @@ const States = ({ children }) => {
           if (res) {
             Geolocation.getCurrentPosition(
               position => {
-                console.log(position);
                 setLocation(position);
               },
               error => {
@@ -83,14 +82,14 @@ const States = ({ children }) => {
     }
 
     // login Route for any user
-    const handleLogin = async ({ roll, password }) => {
+    const handleLogin = async ({ email, password }) => {
         try {
             const response = await fetch(`http://${homeHost}:8001/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ roll, password })
+                body: JSON.stringify({ email, password })
             });
             const json = await response.json();
             if (json.success) {
@@ -324,8 +323,55 @@ const States = ({ children }) => {
             ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
     }
+
+    const handleCheckIn = async({id,date,latitude,longitude})=>{
+        try {
+            const response = await fetch(`http://${homeHost}:8001/checkIn`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id,date,latitude,longitude})
+            });
+            const json = await response.json();
+            
+            if (json.success == true) {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+            else{
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+
+        } catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.LONG)
+        }
+    }
+
+    const handleCheckOut = async({id,date,latitude,longitude})=>{
+        try {
+            const response = await fetch(`http://${homeHost}:8001/checkOut`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id,date,latitude,longitude})
+            });
+            const json = await response.json();
+            
+            if (json.success == true) {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+            else{
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+
+        } catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.LONG)
+        }
+      }
+
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty,getLocation, location }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty,getLocation, location,  handleCheckIn,handleCheckOut  }}>
             {children}
         </Context.Provider>
     );

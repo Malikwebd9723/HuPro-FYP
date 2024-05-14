@@ -57,7 +57,7 @@ export default function UserData() {
     };
     const renderItem = ({ item }) => (
         <ScrollView>
-            <View style={[styles.boxContainer, { borderColor: boxbg }]}>
+            {item.privilege=="User"?<View style={[styles.boxContainer, { borderColor: boxbg }]}>
                 <View style={[styles.boxInner, { borderColor: navBg }]}>
                     <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
                     <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Father Name: </Text>{item.fathername.toUpperCase()}</Text>
@@ -75,7 +75,7 @@ export default function UserData() {
                         <TouchableOpacity onPress={() => { handleConfirmDelete(item.fullname.toUpperCase(), item._id) }} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </View>:""}
         </ScrollView>
     );
     return (

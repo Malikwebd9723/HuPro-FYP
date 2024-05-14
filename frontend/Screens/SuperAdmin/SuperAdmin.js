@@ -138,7 +138,7 @@ export default function SuperAdmin() {
 
                 {/* starting the admin home screen */}
                 <View style={styles.sectionTwo}>
-                    <Text style={[styles.h2, { color }]}>Hello Chief</Text>
+                    <Text style={[styles.h2, { color }]}>Greetings, Chief</Text>
                 </View>
                 <View >
                     <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>Protors Statistics</Text>
@@ -149,7 +149,7 @@ export default function SuperAdmin() {
                     <View style={styles.stateContainer}>
                         <View style={[styles.stateInner, { borderColor: navBg }]}>
                             <Text style={[styles.h4, { color }]}>Registered</Text>
-                            <Text style={[styles.h6, { color }]}>{registeredUsers.length}</Text>
+                            <Text style={[styles.h6, { color }]}>{registeredUsers.length-1}</Text>
                         </View>
                         <View style={[styles.stateInner, { borderColor: navBg }]}>
                             <Text style={[styles.h4, { color }]}>Applicants</Text>

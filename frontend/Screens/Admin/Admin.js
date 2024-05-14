@@ -139,7 +139,7 @@ export default function Admin() {
 
                 {/* starting the admin home screen */}
                 <View style={styles.sectionTwo}>
-                    <Text style={[styles.h2, { color }]}>Hello Admin</Text>
+                    <Text style={[styles.h2, { color }]}>Greetings, Head</Text>
                 </View>
                 <View >
                     <Text style={[styles.h3, { color: colorDark, backgroundColor: boxbg }]}>Protors Statistics</Text>
@@ -150,7 +150,7 @@ export default function Admin() {
                     <View style={styles.stateContainer}>
                         <View style={[styles.stateInner, { borderColor: navBg }]}>
                             <Text style={[styles.h4, { color }]}>Registered</Text>
-                            <Text style={[styles.h6, { color }]}>{registeredUsers.length}</Text>
+                            <Text style={[styles.h6, { color }]}>{registeredUsers.length-1}</Text>
                         </View>
                         <View style={[styles.stateInner, { borderColor: navBg }]}>
                             <Text style={[styles.h4, { color }]}>Applicants</Text>

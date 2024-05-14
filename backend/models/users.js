@@ -61,7 +61,14 @@ const userSchema = new mongoose.Schema({
   },
   attendance: {
     type: Array,
-    default:[{status:"",date:""}]
+  },
+  checkIn:{
+    type:Array,
+    default:[{date:"",latitude:"",longitude:""}]
+  },
+  checkOut:{
+    type:Array,
+    default:[{date:"",latitude:"",longitude:""}]
   },
   emailVerified: {
     type: Boolean,

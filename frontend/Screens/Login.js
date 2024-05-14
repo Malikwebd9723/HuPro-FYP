@@ -15,7 +15,7 @@ export default function Login() {
     const context = useContext(Context)
     const {loggedInStatus,handleLogin} = context;
     const navigation = useNavigation();
-    const [roll, setRoll] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     useEffect(() => {
@@ -34,11 +34,11 @@ export default function Login() {
                 <KeyboardAvoidingView >
                     <View style={styles.secondContainer}>
 
-                        <TextInput style={[styles.input,{backgroundColor:boxbg}]} placeholder="Roll No" keyboardType="numeric" onChangeText={(text) => { setRoll(text) }} />
+                        <TextInput style={[styles.input,{backgroundColor:boxbg}]} placeholder="Enter your email" keyboardType="email-address" onChangeText={(text) => { setEmail(text) }} />
 
                         <TextInput style={[styles.input,{backgroundColor:boxbg}]} placeholder="Password" secureTextEntry={true} onChangeText={(text) => { setPassword(text) }} />
 
-                        <TouchableOpacity onPress={()=>handleLogin({roll, password})} style={styles.loginBtn}>
+                        <TouchableOpacity onPress={()=>handleLogin({email, password})} style={styles.loginBtn}>
 
                             <Text style={styles.loginBtnText}>Login</Text>
 

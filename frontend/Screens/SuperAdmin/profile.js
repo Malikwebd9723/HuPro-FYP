@@ -130,7 +130,7 @@ export default function Profile() {
 
 
                 <View style={[styles.nameContainer]}>
-                    <Text style={[styles.name, { color }]}>{profileData.fullname.toUpperCase()}</Text>
+                    <Text style={[styles.name, { color }]}>{profileData.fullname}</Text>
                     <TouchableOpacity onPress={() => handleLogOut()}><Text style={[{ color, padding:10}]}><AntDesign name="logout" size={23} color={color}/></Text></TouchableOpacity>
                     
                 </View>

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
   Button,
@@ -35,7 +36,7 @@ const requestCameraPermission = async () => {
 const App = () => (
   <View style={styles.container}>
     <Text style={styles.item}>Try permissions</Text>
-    <Button title="request permissions" onPress={requestCameraPermission} />
+    <Button title="request permissions" onPress={()=>{AsyncStorage.clear()}} />
   </View>
 );
 
