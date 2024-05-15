@@ -19,7 +19,8 @@ import AdminProfile from "../Screens/Admin/profile";
 import AddDuties from "../Screens/Admin/AddDuties"
 
 import User from "../Screens/user/User";
-import Attendance from "../Screens/user/Attendance"
+import UserAttendance from "../Screens/user/Attendance";
+import UserProfile from "../Screens/user/Profile"
 import { useTheme } from "styled-components";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
@@ -214,7 +215,7 @@ export default function StackNavigator() {
           />
           <Tab.Screen
             name="Attendance"
-            component={Attendance}
+            component={UserAttendance}
             options={{
               tabBarLabel: "Attendance",
               tabBarLabelStyle: { color: "#008E97" },
@@ -228,23 +229,8 @@ export default function StackNavigator() {
             }}
           />
           <Tab.Screen
-            name="Duties"
-            component={SuperAdminDuties}
-            options={{
-              tabBarLabel: "Duties",
-              tabBarLabelStyle: { color: "#008E97" },
-              headerShown: false,
-              tabBarIcon: ({ focused }) =>
-                focused ? (
-                  <FontAwesome5 name="clipboard-list" size={25} color={color} />
-                ) : (
-                  <FontAwesome5 name="clipboard-list" size={25} color={boxbg} />
-                )
-            }}
-          />
-          <Tab.Screen
             name="Profile"
-            component={SuperAdminProfile}
+            component={UserProfile}
             options={{
               tabBarLabel: "Profile",
               tabBarLabelStyle: { color: "#008E97" },

@@ -19,6 +19,7 @@
     "axios": "^1.6.7",
     "react": "18.2.0",
     "react-native": "0.73.6",
+    "react-native-circular-progress": "^1.4.0",
     "react-native-cli": "^2.0.1",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-maps": "^1.15.1",
@@ -27,6 +28,7 @@
     "react-native-public-ip": "^1.0.2",
     "react-native-safe-area-context": "^4.9.0",
     "react-native-screens": "^3.29.0",
+    "react-native-svg": "^15.2.0",
     "react-native-vector-icons": "^10.1.0",
     "request-ip": "^3.3.0",
     "styled-components": "^6.1.8"
