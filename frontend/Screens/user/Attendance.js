@@ -36,7 +36,7 @@ const requestCameraPermission = async () => {
 const App = () => (
   <View style={styles.container}>
     <Text style={styles.item}>Try permissions</Text>
-    <Button title="request permissions" onPress={()=>{AsyncStorage.clear()}} />
+    <Button title="request permissions" onPress={()=>{AsyncStorage.removeItem("authToken")}} />
   </View>
 );
 

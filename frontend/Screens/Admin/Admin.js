@@ -122,7 +122,7 @@ export default function Admin() {
                                         <Text onPress={() => handleCatToShow("information")} style={[styles.h6, { color, marginVertical: 5 }]}>Information</Text>
                                     </View>
                                 </View>}
-                                <TextInput multiline value={message} onChangeText={(text) => setMessage(text)} style={[styles.notificationMesage, { color: colorDark }]} placeholder="Enter your message"></TextInput>
+                                <TextInput autoFocus multiline value={message} onChangeText={(text) => setMessage(text)} style={[styles.notificationMesage, { color: colorDark }]} placeholder="Enter your message"></TextInput>
                             </View>
                         </ScrollView>
                         <View style={styles.modalBtn}>

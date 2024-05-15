@@ -9,6 +9,8 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6"
 
 
 export default function User() {
+
+
   const context = useContext(Context);
   const { getProfileData, profileData, handleGetNotification, notificationData, getLocation, location, handleCheckIn, handleCheckOut } = context;
   const theme = useTheme();
@@ -19,22 +21,14 @@ export default function User() {
   const colorDark = theme.textDark;
 
   const [loading, setLoading] = useState(true);
-  
-
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
 
   const getId = async () => {
     const userId = await AsyncStorage.getItem("user");
     getProfileData(userId);
 
   }
-
-  useEffect(() => {
-    handleGetNotification();
-    getLocation();
-
-    getId();
-    setLoading(false);
-  }, [])
 
   //  get today date
   const fullDate = new Date();
@@ -44,28 +38,47 @@ export default function User() {
   const date = `${today},${month + 1},${year}`;
 
 
-  const handleConfirmCheckIn = () => {
+  const handleConfirmCheckIn = async () => {
     Alert.alert(
       'Confirmation',
       `Sure to CheckIn?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) },
+        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
+    await AsyncStorage.setItem("checkInDate", date)
     getId();
   };
 
-  const handleConfirmCheckOut = () => {
+  const handleConfirmCheckOut = async () => {
     Alert.alert(
       'Confirmation',
       `Sure to CheckIn?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) },
+        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
+    await AsyncStorage.setItem("checkOutDate", date)
   };
+
+  const getDateFromStrorage = async () => {
+    const checkInDatestorage = await AsyncStorage.getItem("checkInDate");
+    checkInDatestorage && setCheckInDate(checkInDatestorage);
+
+    const checkOutDatestorage = await AsyncStorage.getItem("checkOutDate");
+    checkOutDatestorage && setCheckOutDate(checkOutDatestorage);
+  }
+
+  useEffect(() => {
+    handleGetNotification();
+    getLocation();
+    getId();
+    getDateFromStrorage()
+    setLoading(false);
+  }, [])
+
   return (
     <>
       <View style={[Styles.mainContainer, { backgroundColor }]}>
@@ -108,12 +121,15 @@ export default function User() {
                 {location == false ?
                   <Text style={[{ color: "red", textAlign: "center" }]}>Allow location access for check In or Out</Text> : ""}
 
-                <TouchableOpacity onPress={() => { handleConfirmCheckIn() }} disabled={location == false ? true : false} style={[Styles.checkInBtn, { backgroundColor: location == false ? "grey" : boxbg }]}>
+                <TouchableOpacity onPress={() => { handleConfirmCheckIn() }} disabled={location == false || checkInDate == date ? true : false} style={[Styles.checkInBtn, { backgroundColor: location == false || checkInDate == date ? "grey" : boxbg }]}>
                   <Text style={[Styles.h3, { color: location == false ? "lightgrey" : color }]}>Check In</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { handleConfirmCheckOut() }} disabled={location == false ? true : false} style={[Styles.checkInBtn, { backgroundColor: location == false ? "grey" : boxbg }]}>
-                  <Text style={[Styles.h3, { color: location == false ? "lightgrey" : color }]}>Check Out</Text>
-                </TouchableOpacity>
+                {
+                  checkInDate == date ?
+                    <TouchableOpacity onPress={() => { handleConfirmCheckOut() }} disabled={location == false || checkOutDate == date ? true : false} style={[Styles.checkInBtn, { backgroundColor: location == false || checkOutDate == date ? "grey" : boxbg }]}>
+                      <Text style={[Styles.h3, { color: location == false ? "lightgrey" : color }]}>Check Out</Text>
+                    </TouchableOpacity> : ""
+                }
               </View>
             </ScrollView>}
       </View>

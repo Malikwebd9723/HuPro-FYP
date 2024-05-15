@@ -115,7 +115,9 @@ const States = ({ children }) => {
     // handling the logout
 
     const handleLogOut = async()=>{
-        await AsyncStorage.clear();
+        await AsyncStorage.removeItem("authToken");
+        await AsyncStorage.removeItem("privilege");
+        await AsyncStorage.removeItem("user");
         navigation.navigate("Login");
     }
 
