@@ -7,7 +7,7 @@ import { Context } from "../../context/States";
 export default function Duties() {
     const [users, setUsers] = useState([])
     const context = useContext(Context);
-    const {registeredUsers } = context;
+    const { registeredUsers } = context;
     useEffect(() => {
         setUsers(...users, registeredUsers.filter(user => user.dutyPlace !== "main gate" && user.dutyPlace !== "second gate" && user.dutyPlace !== "third gate" && user.dutyPlace !== ""));
     }, []);
@@ -51,15 +51,16 @@ export default function Duties() {
 
     const renderItemOthers = ({ item }) => (
         <ScrollView>
-            <View style={[styles.boxContainer, { borderColor: boxbg }]}>
-                <View style={[styles.boxInner, { borderColor: navBg }]}>
-                    <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Fater Name: </Text>{item.fathername.toUpperCase()}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Gender: </Text>{item.gender}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Contact#: </Text>{item.contact}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Duty place#: </Text>{item.dutyPlace}</Text>
-                </View>
-            </View>
+            {item.privilege == "User" ?
+                <View style={[styles.boxContainer, { borderColor: boxbg }]}>
+                    <View style={[styles.boxInner, { borderColor: navBg }]}>
+                        <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
+                        <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Fater Name: </Text>{item.fathername.toUpperCase()}</Text>
+                        <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Gender: </Text>{item.gender}</Text>
+                        <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Contact#: </Text>{item.contact}</Text>
+                        <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Duty place#: </Text>{item.dutyPlace}</Text>
+                    </View>
+                </View> : ""}
         </ScrollView>
     );
 

@@ -207,8 +207,8 @@ app.post("/login", async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
 
-        if (!user) {
-            return res.status(401).json({ message: "Wrong credentials" })
+        if (!user || user.userVerified == false) {
+            return res.status(401).json({ message: "No User Found!" })
         }
         else if (user.password !== password) {
             return res.status(401).json({ message: "Invalid password" })
@@ -373,6 +373,24 @@ app.post("/checkOut",async (req,res)=>{
             await user.updateOne({$set:{checkOut:{date,latitude,longitude}} })
             await user.save();
             return res.status(200).json({success:true, message: "CheckedOut Successfully!" })
+        }
+    } catch (error) {
+        return res.status(500).json({success:false, message: error.message })
+
+    }
+});
+
+app.post("/attendance",async (req,res)=>{
+    try {
+        const{id, date, status} = req.body;
+        const user = await User.findOne({_id:id});
+        if (!user) {
+            return res.status(401).json({success:false, message:"Something went wrong!"})
+        } else {
+            await user.updateOne({$push:{attendance:{date,status}} })
+            await user.updateOne({$set:{lastattendance:{date,status}} })
+            await user.save();
+            return res.status(200).json({success:true, message: "Attendance marked!" })
         }
     } catch (error) {
         return res.status(500).json({success:false, message: error.message })

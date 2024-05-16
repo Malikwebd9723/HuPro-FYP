@@ -3,10 +3,13 @@ import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
 import { useEffect, useState, useContext } from "react";
 import { Context } from "../../context/States";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function UserData() {
     const context = useContext(Context);
     const { getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser } = context;
+    const navigation = useNavigation();
     useEffect(() => {
         getRegisteredUsers();
         getApplicantUsers();
@@ -57,25 +60,38 @@ export default function UserData() {
     };
     const renderItem = ({ item }) => (
         <ScrollView>
-            {item.privilege=="User"?<View style={[styles.boxContainer, { borderColor: boxbg }]}>
-                <View style={[styles.boxInner, { borderColor: navBg }]}>
-                    <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Father Name: </Text>{item.fathername.toUpperCase()}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Gender: </Text>{item.gender}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Roll#: </Text>{item.roll}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Department: </Text>{item.department}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Email: </Text>{item.email}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>CNIC#: </Text>{item.cnic}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Contact# : </Text>{item.contact}</Text>
-                    <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Address: </Text>{item.address}</Text>
-                    {catToShow == "applicants" ? <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Apply on: </Text>{item.createdAt.split("T")[0]}</Text> : ""}
-                    <View style={styles.btnContainer}>
-                        {catToShow == "applicants" ? <TouchableOpacity onPress={() => { handleConfirmRegister(item.fullname.toUpperCase(), item._id,) }} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Register</Text></TouchableOpacity> : ""}
+            {item.privilege == "User" ?
+                <View style={[styles.boxContainer, { borderColor: boxbg }]}>
 
-                        <TouchableOpacity onPress={() => { handleConfirmDelete(item.fullname.toUpperCase(), item._id) }} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
-                    </View>
-                </View>
-            </View>:""}
+                    {catToShow == "registered" ?
+                    
+                        <TouchableOpacity onPress={() => { navigation.navigate("specificUser", { item }) }} style={[styles.boxInner, { borderColor: navBg }]}>
+                            <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Father Name: </Text>{item.fathername.toUpperCase()}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Roll#: </Text>{item.roll}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Department: </Text>{item.department}</Text>
+                        </TouchableOpacity> :
+
+
+                        <View style={[styles.boxInner, { borderColor: navBg }]}>
+                            <Text style={[styles.h5, { color }]}>{item.fullname.toUpperCase()}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Father Name: </Text>{item.fathername.toUpperCase()}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Gender: </Text>{item.gender}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Roll#: </Text>{item.roll}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Department: </Text>{item.department}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Email: </Text>{item.email}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>CNIC#: </Text>{item.cnic}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Contact# : </Text>{item.contact}</Text>
+                            <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Address: </Text>{item.address}</Text>
+                            {catToShow == "applicants" ? <Text style={[styles.h6, { color }]}><Text style={{ fontWeight: "500" }}>Apply on: </Text>{item.createdAt.split("T")[0]}</Text> : ""}
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity onPress={() => { handleConfirmRegister(item.fullname.toUpperCase(), item._id,) }} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Register</Text></TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => { handleConfirmDelete(item.fullname.toUpperCase(), item._id) }} style={[styles.btn, { backgroundColor: boxbg }]}><Text style={[{ color: colorDark, fontWeight: "500" }]}>Delete User</Text></TouchableOpacity>
+                            </View>
+                        </View>
+                    }
+                </View> : ""}
         </ScrollView>
     );
     return (
@@ -133,7 +149,7 @@ export default function UserData() {
 
 
 const styles = StyleSheet.create({
-    mainContainer: { padding: 10, paddingBottom: "35%",minHeight:"100%" },
+    mainContainer: { padding: 10, paddingBottom: "35%", minHeight: "100%" },
     cat: { padding: 10, marginVertical: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "center", width: "50%" },
     catText: { fontSize: 15, fontWeight: "500" },
     h2: { fontSize: 25, fontWeight: "400" },

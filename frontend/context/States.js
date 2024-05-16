@@ -207,8 +207,8 @@ const States = ({ children }) => {
             });
             const json = await response.json();
             ToastAndroid.show(json.message, ToastAndroid.LONG)
-            getRegisteredUsers();
-            getApplicantUsers();
+            await getRegisteredUsers();
+            await getApplicantUsers();
         } catch (error) {
             ToastAndroid.show("Error while register user", ToastAndroid.LONG)
         }
@@ -226,8 +226,8 @@ const States = ({ children }) => {
             });
             const json = await response.json();
             ToastAndroid.show(json.message, ToastAndroid.LONG)
-            getRegisteredUsers();
-            getApplicantUsers();
+            await getRegisteredUsers();
+            await getApplicantUsers();
         } catch (error) {
             ToastAndroid.show("Error during deletion", ToastAndroid.LONG)
         }
@@ -372,8 +372,31 @@ const States = ({ children }) => {
         }
       }
 
+      const handleAttendance = async({id,date,status})=>{
+        try {
+            const response = await fetch(`http://${homeHost}:8001/attendance`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id,date, status})
+            });
+            const json = await response.json();
+            
+            if (json.success == true) {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+            else{
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+
+        } catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.LONG)
+        }
+      }
+
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty,getLocation, location,  handleCheckIn,handleCheckOut  }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty,getLocation, location,  handleCheckIn,handleCheckOut,handleAttendance }}>
             {children}
         </Context.Provider>
     );

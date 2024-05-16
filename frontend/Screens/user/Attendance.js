@@ -1,10 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Modal, TextInput, ToastAndroid } from "react-native";
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Modal, TextInput, ToastAndroid, Alert, ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
 import { useEffect, useState, useContext } from "react";
 import { Context } from "../../context/States";
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 
 export default function Attendance() {
@@ -12,7 +11,7 @@ export default function Attendance() {
   const homeHost = "192.168.10.12";
   // const homeHost = "10.121.28.223";
   const context = useContext(Context);
-  const { handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, getProfileData } = context;
+  const { handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, profileData, getProfileData, handleAttendance } = context;
   const theme = useTheme();
   const color = theme.text;
   const backgroundColor = theme.bg;
@@ -20,33 +19,72 @@ export default function Attendance() {
   const navBg = theme.navBg;
   const colorDark = theme.textDark;
 
+  //  get today date
+  const fullDate = new Date();
+  const today = fullDate.getDate();
+  const month = fullDate.getMonth();
+  const year = fullDate.getFullYear();
+  const date = `${today},${month + 1},${year}`;
+
+  const [disabled, setDisabled] = useState(false)
+  const[load,setLoad] = useState(true);
+
+  const handleConfirmPresent = async (status) => {
+    Alert.alert(
+      'Confirmation',
+      `Sure to ${status}?`,
+      [
+        { text: 'No' },
+        { text: 'Yes', onPress: () => markAttendance(status) },
+      ]
+    );
+  };
+
+  const markAttendance = async (status) => {
+    await handleAttendance({ id: profileData._id, date, status });
+    await getId();
+    setDisabled(true);
+    setLoad(false)
+  }
+
+  const getId = async () => {
+    const userId = await AsyncStorage.getItem("user");
+    getProfileData(userId);
+  }
+
+  useEffect(() => {
+    setLoad(false)
+  }, [])
   return (
     <>
       <View style={[Styles.mainContainer, { backgroundColor }]}>
         <TopNav text="Attendance" />
-
         <View>
-          <AnimatedCircularProgress
-            size={100} // Diameter of the progress bar
-            width={10}  // Stroke width of the progress bar
-            fill={70}   // Current progress (0 to 100)
-            tintColor="#3498db" // Color of the progress bar
-            backgroundColor="#e0e0e0" // Color of the background circle
-          />
           <View style={[Styles.attendanceContainerInner]}>
-            <TouchableOpacity><Text style={[Styles.markBtn, { color, backgroundColor: "green" }]}>Present</Text></TouchableOpacity>
-            <TouchableOpacity><Text style={[Styles.markBtn, { color, backgroundColor: "red" }]}>Absent</Text></TouchableOpacity>
+
+            <TouchableOpacity disabled={profileData.lastattendance[0].date == date || disabled} onPress={() => { handleConfirmPresent("present") }}><Text style={[Styles.markBtn, { color, backgroundColor: profileData.lastattendance[0].date == date || disabled ? "grey" : "green" }]}>Present</Text></TouchableOpacity>
+
+            <TouchableOpacity disabled={profileData.lastattendance[0].date == date || disabled} onPress={() => { handleConfirmPresent("absent") }}><Text style={[Styles.markBtn, { color, backgroundColor: profileData.lastattendance[0].date == date || disabled ? "grey" : "red" }]}>Absent</Text></TouchableOpacity>
+
           </View>
+          {load ? <ActivityIndicator size={30}/>:
           <ScrollView style={[Styles.detailContainer]}>
             <View style={[Styles.detailContainerInner, { borderBottomColor: color, borderBottomWidth: 1 }]}>
               <Text style={[{ color }]}>Status</Text>
               <Text style={[{ color }]}>Date</Text>
             </View>
-            <View style={[Styles.detailContainerInner]}>
-              <Text style={[{ color }]}>Present</Text>
-              <Text style={[{ color }]}>15,6,2024</Text>
-            </View>
-          </ScrollView>
+            {profileData.attendance.map((item) => {
+              return (
+                <>
+                  {item.date !== "" ?
+                    <View style={[Styles.detailContainerInner]}>
+                      <Text style={[{ color }]}>{item.status}</Text>
+                      <Text style={[{ color }]}>{item.date}</Text>
+                    </View> : ""}
+                </>
+              )
+            })}
+          </ScrollView>}
         </View>
       </View>
     </>

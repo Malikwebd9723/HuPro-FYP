@@ -61,6 +61,7 @@ const userSchema = new mongoose.Schema({
   },
   attendance: {
     type: Array,
+    default:[{status:"",date:""}]
   },
   checkIn:{
     type:Array,

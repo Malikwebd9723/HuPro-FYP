@@ -16,7 +16,8 @@ import Admin from "../Screens/Admin/Admin";
 import AdminUserData from "../Screens/Admin/UsersData";
 import AdminDuties from "../Screens/Admin/Duties";
 import AdminProfile from "../Screens/Admin/profile";
-import AddDuties from "../Screens/Admin/AddDuties"
+import AddDuties from "../Screens/Admin/AddDuties";
+import SpecificUser from "../Screens/SpecificUser"
 
 import User from "../Screens/user/User";
 import UserAttendance from "../Screens/user/Attendance";
@@ -259,6 +260,7 @@ export default function StackNavigator() {
           <Stack.Screen name="SuperAdmin" component={SuperAdminTabNavigator} options={{ headerShown: false }} />
           <Stack.Screen name="Admin" component={AdminTabNavigator} options={{ headerShown: false }} />
           <Stack.Screen name="User" component={UserTabNavigator} options={{ headerShown: false }} />
+          <Stack.Screen name="specificUser" component={SpecificUser}/>
         </Stack.Navigator>
       </States>
     </NavigationContainer>
