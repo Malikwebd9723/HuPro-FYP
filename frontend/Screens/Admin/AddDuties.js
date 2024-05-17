@@ -53,8 +53,8 @@ export default function Duties() {
                         <Text style={[{ color, flex: 1 }]}>{item.roll}</Text>
 
                         {item.lastattendance[0].date == "" || item.lastattendance[0].date !== date ?
-                            <Text style={{ color: "red", fontWeight: "500", flex: 1 }}>Absent</Text>:
-                            <Text style={{ color: "green", fontWeight: "500", flex: 1 }}>{item.lastattendance[0].status}</Text>}
+                            <Text style={{ color: "red", fontWeight: "500", flex: 1 }}>absent</Text>:
+                            <Text style={{ color: item.lastattendance[0].status == "present"? "green": "red", fontWeight: "500", flex: 1 }}>{item.lastattendance[0].status}</Text>}
                     </View>
 
                     <View style={styles.detailsContainer}>
@@ -115,8 +115,6 @@ export default function Duties() {
                         <Text style={{ color }}>Nothing to show!</Text>
                     </View>
                 )} />
-
-
         </View>
     )
 };

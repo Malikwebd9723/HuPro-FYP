@@ -7,7 +7,7 @@ import Geolocation from 'react-native-geolocation-service';
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.12";
+    const homeHost = "192.168.10.4";
     // const homeHost = "10.121.28.223";
     const navigation = useNavigation();
 

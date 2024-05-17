@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Modal, TextInput, ToastAndroid } from "react-native";
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Modal, TextInput, ToastAndroid, ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../../components/TopNav";
 import { useEffect, useState, useContext } from "react";
@@ -7,8 +7,7 @@ import { Context } from "../../context/States";
 
 export default function Admin() {
     const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.12";
-    // const homeHost = "10.121.28.223";
+    const homeHost = "192.168.10.4";
     const context = useContext(Context);
     const {handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers ,getProfileData} = context;
     const theme = useTheme();
@@ -23,6 +22,7 @@ export default function Admin() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [catToShow, setCatToShow] = useState("")
     const [message, setMessage] = useState("");
+    const [load,setLoad] = useState(false);
 
     // show modal to add notification
     const addNotification = () => {
@@ -61,6 +61,7 @@ export default function Admin() {
     const type = catToShow;
     const handleSetNotification = async () => {
         try {
+            setLoad(true);
             if (message !== "" && catToShow !== "") {
                 const response = await fetch(`http://${homeHost}:8001/setNotification`, {
                     method: "POST",
@@ -72,12 +73,15 @@ export default function Admin() {
                 const json = await response.json();
                 ToastAndroid.show(json.message, ToastAndroid.SHORT);
                 setIsModalVisible(!isModalVisible);
+                setLoad(false);
             } else {
                 ToastAndroid.show("Fill all the fields", ToastAndroid.LONG);
+                setLoad(false);
             }
         } catch (error) {
             ToastAndroid.show(json.message, ToastAndroid.LONG)
             setIsModalVisible(!isModalVisible);
+            setLoad(false);
         }
     }
 
@@ -105,6 +109,7 @@ export default function Admin() {
                 {/* the modal we will use to upate notification content */}
                 <Modal transparent animationType="fade" visible={isModalVisible}>
                     <View style={styles.transparentContainer}></View>
+                    {load ? <ActivityIndicator size={20}/>:
                     <View style={[styles.modal, { backgroundColor: navBg }]}>
                         <Text style={styles.h2}>New Notification</Text>
                         <Text style={{ color: "brown" }}>New notification will override the older one with same "Type"!</Text>
@@ -122,7 +127,7 @@ export default function Admin() {
                                         <Text onPress={() => handleCatToShow("information")} style={[styles.h6, { color, marginVertical: 5 }]}>Information</Text>
                                     </View>
                                 </View>}
-                                <TextInput autoFocus multiline value={message} onChangeText={(text) => setMessage(text)} style={[styles.notificationMesage, { color: colorDark }]} placeholder="Enter your message"></TextInput>
+                                <TextInput multiline value={message} onChangeText={(text) => setMessage(text)} style={[styles.notificationMesage, { color: colorDark }]} placeholder="Enter your message"></TextInput>
                             </View>
                         </ScrollView>
                         <View style={styles.modalBtn}>
@@ -130,7 +135,7 @@ export default function Admin() {
 
                             <TouchableOpacity style={[styles.closeModalBtn, { backgroundColor, color }]} onPress={() => handleSetNotification()}><Text style={[styles.closeModalBtnText, { color }]}>Send</Text></TouchableOpacity>
                         </View>
-                    </View>
+                    </View>}
                     <View style={styles.transparentContainer}></View>
                 </Modal>
                 {/* this is a TopNav pre built component */}

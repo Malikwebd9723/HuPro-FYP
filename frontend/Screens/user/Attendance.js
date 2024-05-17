@@ -73,15 +73,12 @@ export default function Attendance() {
               <Text style={[{ color }]}>Status</Text>
               <Text style={[{ color }]}>Date</Text>
             </View>
-            {profileData.attendance.map((item) => {
+            {profileData.attendance.slice(1).map((item) => {
               return (
-                <>
-                  {item.date !== "" ?
-                    <View style={[Styles.detailContainerInner]}>
+                    <View key={item.date} style={[Styles.detailContainerInner]}>
                       <Text style={[{ color }]}>{item.status}</Text>
                       <Text style={[{ color }]}>{item.date}</Text>
-                    </View> : ""}
-                </>
+                    </View>
               )
             })}
           </ScrollView>}

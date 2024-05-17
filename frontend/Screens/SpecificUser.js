@@ -95,15 +95,12 @@ export default function UserData() {
                                 <Text style={[{ color }]}>Status</Text>
                                 <Text style={[{ color }]}>Date</Text>
                             </View>
-                            {item.attendance.map((item) => {
+                            {item.attendance.slice(1).map((item) => {
                                 return (
-                                    <>
-                                        {item.date !== "" ?
-                                            <View key={item.id + 1} style={[styles.detailContainerInner]}>
+                                            <View key={item.date} style={[styles.detailContainerInner]}>
                                                 <Text style={[{ color }]}>{item.status}</Text>
                                                 <Text style={[{ color }]}>{item.date}</Text>
-                                            </View> : ""}
-                                    </>
+                                            </View>
                                 )
                             })}
                         </ScrollView> : ""}

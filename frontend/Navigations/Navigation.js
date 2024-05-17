@@ -260,7 +260,7 @@ export default function StackNavigator() {
           <Stack.Screen name="SuperAdmin" component={SuperAdminTabNavigator} options={{ headerShown: false }} />
           <Stack.Screen name="Admin" component={AdminTabNavigator} options={{ headerShown: false }} />
           <Stack.Screen name="User" component={UserTabNavigator} options={{ headerShown: false }} />
-          <Stack.Screen name="specificUser" component={SpecificUser}/>
+          <Stack.Screen name="specificUser" component={SpecificUser} options={{headerStyle:{backgroundColor:navBg}}}/>
         </Stack.Navigator>
       </States>
     </NavigationContainer>
