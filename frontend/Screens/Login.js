@@ -15,9 +15,15 @@ export default function Login() {
     const context = useContext(Context)
     const {loggedInStatus,handleLogin} = context;
     const navigation = useNavigation();
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const[showPass,setShowPass] = useState(true);
 
+    const callHandleLogin=()=>{
+        handleLogin({email, password});
+        setEmail("");
+        setPassword("");
+    }
     useEffect(() => {
         // check the user logged in status to navigate according to privilege
         loggedInStatus();
@@ -34,11 +40,13 @@ export default function Login() {
                 <KeyboardAvoidingView >
                     <View style={styles.secondContainer}>
 
-                        <TextInput style={[styles.input,{backgroundColor:boxbg}]} placeholder="Enter your email" keyboardType="email-address" onChangeText={(text) => { setEmail(text) }} />
+                        <TextInput value={email} style={[styles.input,{backgroundColor:boxbg}]} placeholder="Enter your email" keyboardType="email-address" onChangeText={(text) => { setEmail(text) }} />
 
-                        <TextInput style={[styles.input,{backgroundColor:boxbg}]} placeholder="Password" secureTextEntry={true} onChangeText={(text) => { setPassword(text) }} />
-
-                        <TouchableOpacity onPress={()=>handleLogin({email, password})} style={styles.loginBtn}>
+                        <TextInput value={password} style={[styles.input,{backgroundColor:boxbg}]} placeholder="Password" secureTextEntry={showPass} onChangeText={(text) => { setPassword(text) }} />
+                        
+                        <TouchableOpacity onPress={()=>setShowPass(!showPass)}><Text style={[{color:colorDark}]}>{showPass?"Show Password":"Hide Password"}</Text></TouchableOpacity>
+                        
+                        <TouchableOpacity onPress={()=>callHandleLogin()} style={styles.loginBtn}>
 
                             <Text style={styles.loginBtnText}>Login</Text>
 

@@ -110,7 +110,25 @@ const States = ({ children }) => {
             ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
     }
+    const handleForgotPassword = async ({email})=>{
+        
+        // () => navigation.navigate("Login")
+        const response = await fetch(`http://${homeHost}:8001/forgotpassword`,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({email})
+        });
 
+        const json = await response.json();
+        if (json.success) {
+            ToastAndroid.show(json.message,ToastAndroid.LONG)
+            navigation.navigate("Login")
+        } else {
+            ToastAndroid.show(json.message,ToastAndroid.LONG)
+        }
+    }
 
     // handling the logout
 
@@ -396,7 +414,7 @@ const States = ({ children }) => {
       }
 
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty,getLocation, location,  handleCheckIn,handleCheckOut,handleAttendance }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin,handleForgotPassword,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty,getLocation, location,  handleCheckIn,handleCheckOut,handleAttendance }}>
             {children}
         </Context.Provider>
     );

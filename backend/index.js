@@ -134,7 +134,7 @@ app.post("/register", async (req, res) => {
             await newUser.save();
 
             //sending email to verify user email
-            // handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: http://${homeHost}:8001/verify/${newUser.verificationToken}`);
+            handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: http://${homeHost}:8001/verify/${newUser.verificationToken}`);
 
             return res.status(201).json({ success: true, message: "Registered successfully, check your email for verification" });
         }
@@ -185,7 +185,7 @@ app.post("/forgotpassword", async (req, res) => {
                 password += digits[Math.floor(Math.random() * digits.length)];
             }
             //send email for password reset and update
-            handleSendEmail(user.email, "Password reset from HuPro", `Roll no is ${user.roll}
+            handleSendEmail(user.email, "Password reset from HuPro", `Your Email is ${user.email}
         Password is ${password.replace(/\s+/g, '')}`)
 
             user.password = password;

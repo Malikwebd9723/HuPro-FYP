@@ -1,7 +1,8 @@
 import { StyleSheet, ScrollView, KeyboardAvoidingView, View, Text, TextInput, TouchableOpacity, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useTheme } from "styled-components";
+import { Context } from "../context/States";
 
 export default function ForgotPass() {
     const theme = useTheme();
@@ -10,30 +11,13 @@ export default function ForgotPass() {
     const boxbg = theme.boxBg;
     const navBg = theme.navBg;
     const colorDark = theme.textDark;
+    const context = useContext(Context)
+    const {handleForgotPassword} = context;
+
     const[email,setEmail] = useState("")
     const navigation = useNavigation();
     const homeHost = "192.168.10.14";
 
-
-    const handlesubmit = async ()=>{
-        
-        // () => navigation.navigate("Login")
-        const response = await fetch(`http://${homeHost}:8001/forgotpassword`,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({email})
-        });
-
-        const json = await response.json();
-        if (json.success) {
-            ToastAndroid.show(json.message,ToastAndroid.LONG)
-            navigation.navigate("Login")
-        } else {
-            ToastAndroid.show(json.message,ToastAndroid.LONG)
-        }
-    }
     return (
         <>
             <ScrollView>
@@ -49,7 +33,7 @@ export default function ForgotPass() {
 
                         <TextInput style={[styles.input,{backgroundColor:boxbg}]} onChangeText={(text=>setEmail(text))} placeholder="Email Address" keyboardType="email-address" />
 
-                        <TouchableOpacity onPress={handlesubmit} style={styles.loginBtn}>
+                        <TouchableOpacity onPress={()=>handleForgotPassword({email})} style={styles.loginBtn}>
 
                             <Text style={styles.loginBtnText}>Submit</Text>
 
