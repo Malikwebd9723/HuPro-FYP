@@ -16,7 +16,6 @@ export default function ForgotPass() {
 
     const[email,setEmail] = useState("")
     const navigation = useNavigation();
-    const homeHost = "192.168.10.14";
 
     return (
         <>

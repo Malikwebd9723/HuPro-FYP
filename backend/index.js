@@ -169,6 +169,7 @@ app.get("/verify/:token", async (req, res) => {
     }
 });
 
+
 app.post("/forgotpassword", async (req, res) => {
     try {
         const { email } = req.body;
@@ -191,7 +192,7 @@ app.post("/forgotpassword", async (req, res) => {
             user.password = password;
             await user.save()
 
-            return res.status(200).json({ success: true, message: "Password reset succesfully, check your email" })
+            return res.status(200).json({ success: true, message: "Password reset successfully, check your email" })
         } else {
             return res.status(404).json({ message: "Oops! No verified user found" })
         }
@@ -200,6 +201,24 @@ app.post("/forgotpassword", async (req, res) => {
     }
 });
 
+
+app.post("/changePassword", async (req, res) => {
+    try {
+        const { id, oldPwd, newPwd } = req.body;
+        const user = await User.findOne({_id:id });
+
+
+        if (user && user.password == oldPwd) {
+            user.password = newPwd;
+            await user.save()
+            return res.status(200).json({ success: true, message: "Password reset successfully!" })
+        } else {
+            return res.status(404).json({ message: "Oops! Incorrect Old Password!" })
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
 
 // endpoint for login user
 app.post("/login", async (req, res) => {

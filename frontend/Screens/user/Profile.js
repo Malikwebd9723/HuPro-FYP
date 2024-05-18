@@ -10,7 +10,12 @@ import AntDesign from "react-native-vector-icons/AntDesign"
 export default function Profile() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const context = useContext(Context);
-    const {handleLogOut, getProfileData, profileData, handleUpdateuser } = context;
+    const [oldPwd, setOldPwd] = useState("");
+    const [newPwd, setNewPwd] = useState("");
+    const [confirmPwd, setConfirmPwd] = useState("");
+    const [showErr, setShowErr] = useState(false);
+
+    const { handleLogOut, getProfileData, profileData, handleUpdateuser,handlePasswordChange } = context;
 
     const theme = useTheme();
     const color = theme.text;
@@ -56,6 +61,30 @@ export default function Profile() {
         }
     }
 
+    const validatePwd = ()=>{
+        if(newPwd == confirmPwd){
+            setShowErr(false);
+            return true
+        }
+        else{
+            setShowErr(true);
+            return false
+        }
+    };
+
+
+    const callPasswordChange = async ()=>{
+        const validation = await validatePwd();
+        if(validation && oldPwd !== "" && newPwd !== "" && confirmPwd !== ""){
+            handlePasswordChange({id:profileData._id, oldPwd, newPwd});
+            setOldPwd("");
+            setNewPwd("");
+            setConfirmPwd("");
+        }
+        else{
+            ToastAndroid.show("Fill the fields conrrectly!", ToastAndroid.LONG)
+        }
+    }
     return (
         <View style={[styles.mainContainer, { backgroundColor }]}>
             <TopNav text="Profile" />
@@ -72,7 +101,7 @@ export default function Profile() {
 
                                 <View style={[styles.detailsContainerInner]}>
                                     <Text style={[styles.keys, { color }]}>Full Name:</Text>
-                                    <TextInput  multiline value={fullname} onChangeText={(text) => setDetails(({ ...details, fullname: text }))} style={[styles.values, { backgroundColor: boxbg, color: colorDark }]} />
+                                    <TextInput multiline value={fullname} onChangeText={(text) => setDetails(({ ...details, fullname: text }))} style={[styles.values, { backgroundColor: boxbg, color: colorDark }]} />
                                 </View>
 
                                 <View style={[styles.detailsContainerInner]}>
@@ -131,8 +160,8 @@ export default function Profile() {
 
                 <View style={[styles.nameContainer]}>
                     <Text style={[styles.name, { color }]}>{profileData.fullname}</Text>
-                    <TouchableOpacity onPress={() => handleLogOut()}><Text style={[{ color, padding:10}]}><AntDesign name="logout" size={23} color={color}/></Text></TouchableOpacity>
-                    
+                    <TouchableOpacity onPress={() => handleLogOut()}><Text style={[{ color, padding: 10 }]}><AntDesign name="logout" size={23} color={color} /></Text></TouchableOpacity>
+
                 </View>
 
                 {profileData.emailVerified == false ? <Text style={[{ color: "red", paddingBottom: 10 }]}>Your email is not verified, check your G-mail.</Text> : ""}
@@ -194,6 +223,20 @@ export default function Profile() {
                         <Text style={[styles.values, { backgroundColor: boxbg, color: colorDark }]}>{profileData.contact}</Text>
                     </View>
                 </View>
+                <View style={[styles.detailsContainer, { borderColor: color, padding: 10 }]}>
+                    <Text style={[styles.h3, { color }]}>Update Password</Text>
+                    <Text style={[{ color, padding: 10 }]}>Current Password</Text>
+                    <TextInput onChangeText={(txt) => { setOldPwd(txt) }} value={oldPwd} style={[styles.values, { backgroundColor: boxbg, color: colorDark }]} placeholder="Enter your current password!" />
+
+                    <Text style={[{ color, padding: 10 }]}>New password</Text>
+                    <TextInput onChangeText={(txt) => { setNewPwd(txt) }} value={newPwd} style={[styles.values, { backgroundColor: boxbg, color: colorDark }]} placeholder="Enter new password!" />
+
+                    <Text style={[{ color, padding: 10 }]}>Confirm new password</Text>
+                    <TextInput onChangeText={(txt) => { setConfirmPwd(txt), setShowErr(false)}} value={confirmPwd} style={[styles.values, { backgroundColor: boxbg, color: colorDark }]} placeholder="Confirm new password!" />
+                    {showErr && <Text style={[{ color: "red", paddingHorizontal: 15 }]}>Password does not match!</Text>
+                    }
+                    <TouchableOpacity onPress={()=>callPasswordChange()} style={[styles.closeModalBtn, { backgroundColor: navBg, width: "30%", alignItems: "center" }]}><Text style={[styles.closeModalBtnText]}>Save</Text></TouchableOpacity>
+                </View>
             </ScrollView>
         </View>
     )
@@ -203,11 +246,11 @@ export default function Profile() {
 const styles = StyleSheet.create({
     mainContainer: { padding: 10, paddingBottom: "20%", minHeight: "100%" },
     nameContainer: { marginVertical: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-    name: { flex:1, fontSize: 20 },
+    name: { flex: 1, fontSize: 20 },
 
     updateBtn: { flex: 1, padding: 5, borderRadius: 10, margin: 10 },
 
-    detailsContainer: { borderWidth: 1, borderRadius: 10, padding: 5,marginVertical:10 },
+    detailsContainer: { borderWidth: 1, borderRadius: 10, padding: 5, marginVertical: 10 },
     detailsContainerInner: { flexDirection: "row", alignItems: "center" },
     keys: { fontWeight: "400", flex: 1 },
     values: { flex: 3, padding: 10, margin: 10, fontWeight: "600", borderRadius: 20 },
@@ -215,6 +258,7 @@ const styles = StyleSheet.create({
     modal: { flex: 5, padding: 10, borderRadius: 10 },
     transparentContainer: { flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5 )" },
     h2: { fontSize: 25, fontWeight: "500" },
+    h3: { fontSize: 20, fontWeight: "500" },
     modalBtn: { flexDirection: "row", justifyContent: "space-around", width: "100%" },
     closeModalBtn: { borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, paddingVertical: 10, margin: 10 },
     closeModalBtnText: { fontSize: 15, fontWeight: "500" },

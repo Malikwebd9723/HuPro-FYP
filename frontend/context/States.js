@@ -7,7 +7,7 @@ import Geolocation from 'react-native-geolocation-service';
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.4";
+    const homeHost = "192.168.10.7";
     // const homeHost = "10.121.28.223";
     const navigation = useNavigation();
 
@@ -23,48 +23,48 @@ const States = ({ children }) => {
 
     const requestLocationPermission = async () => {
         try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Geolocation Permission',
-              message: 'Can we access your location?',
-              buttonNeutral: 'Ask Me Later',
-              buttonNegative: 'Cancel',
-              buttonPositive: 'OK',
-            },
-          );
-          console.log('granted', granted);
-          if (granted === 'granted') {
-            console.log('You can use Geolocation');
-            return true;
-          } else {
-            console.log('You cannot use Geolocation');
-            return false;
-          }
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    title: 'Geolocation Permission',
+                    message: 'Can we access your location?',
+                    buttonNeutral: 'Ask Me Later',
+                    buttonNegative: 'Cancel',
+                    buttonPositive: 'OK',
+                },
+            );
+            console.log('granted', granted);
+            if (granted === 'granted') {
+                console.log('You can use Geolocation');
+                return true;
+            } else {
+                console.log('You cannot use Geolocation');
+                return false;
+            }
         } catch (err) {
-          return false;
+            return false;
         }
-      };
+    };
     const getLocation = () => {
         const result = requestLocationPermission();
         result.then(res => {
-          console.log('res is:', res);
-          if (res) {
-            Geolocation.getCurrentPosition(
-              position => {
-                setLocation(position);
-              },
-              error => {
-                // See error code charts below.
-                console.log(error.code, error.message);
-                setLocation(false);
-              },
-              {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-            );
-          }
+            console.log('res is:', res);
+            if (res) {
+                Geolocation.getCurrentPosition(
+                    position => {
+                        setLocation(position);
+                    },
+                    error => {
+                        // See error code charts below.
+                        console.log(error.code, error.message);
+                        setLocation(false);
+                    },
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+                );
+            }
         });
         console.log(location);
-      };
+    };
 
 
 
@@ -110,75 +110,73 @@ const States = ({ children }) => {
             ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
     }
-    const handleForgotPassword = async ({email})=>{
-        
+    const handleForgotPassword = async ({ email }) => {
+
         // () => navigation.navigate("Login")
-        const response = await fetch(`http://${homeHost}:8001/forgotpassword`,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const response = await fetch(`http://${homeHost}:8001/forgotpassword`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({email})
+            body: JSON.stringify({ email })
         });
 
         const json = await response.json();
         if (json.success) {
-            ToastAndroid.show(json.message,ToastAndroid.LONG)
+            ToastAndroid.show(json.message, ToastAndroid.LONG)
             navigation.navigate("Login")
         } else {
-            ToastAndroid.show(json.message,ToastAndroid.LONG)
+            ToastAndroid.show(json.message, ToastAndroid.LONG)
+        }
+    }
+
+    const handlePasswordChange = async ({ id, oldPwd, newPwd }) => {
+        try {
+            const response = await fetch(`http://${homeHost}:8001/changePassword`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id, oldPwd, newPwd })
+            });
+            const json = await response.json();
+            if (json.success) {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+            else {
+                ToastAndroid.show(json.message, ToastAndroid.LONG)
+            }
+        } catch (error) {
+            console.log(`error changing password,${error.message}`);
         }
     }
 
     // handling the logout
 
-    const handleLogOut = async()=>{
+    const handleLogOut = async () => {
         await AsyncStorage.removeItem("authToken");
         await AsyncStorage.removeItem("privilege");
         await AsyncStorage.removeItem("user");
         navigation.navigate("Login");
     }
 
-    const handleSetNotification = async (type,message) => {
+    // delete notification from database
+    const handleDeleteNotification = async (id) => {
         try {
-            if (message !== "" && catToShow !== "") {
-                const response = await fetch(`http://${homeHost}:8001/setNotification`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ type, message })
-                });
-                const json = await response.json();
-                ToastAndroid.show(json.message, ToastAndroid.SHORT);
-                setIsModalVisible(!isModalVisible);
-            } else {
-                ToastAndroid.show("Fill all the fields", ToastAndroid.LONG);
-            }
+            const response = await fetch(`http://${homeHost}:8001/deleteNotification`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id })
+            });
+            setMessage(id)
+            const json = await response.json();
+            ToastAndroid.show(json.message, ToastAndroid.LONG);
         } catch (error) {
-            ToastAndroid.show(json.message, ToastAndroid.LONG)
-            setIsModalVisible(!isModalVisible);
+            ToastAndroid.show("Error deleting notification", ToastAndroid.LONG)
         }
     }
-
-
-        // delete notification from database
-        const handleDeleteNotification = async (id) => {
-            try {
-                const response = await fetch(`http://${homeHost}:8001/deleteNotification`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ id })
-                });
-                setMessage(id)
-                const json = await response.json();
-                ToastAndroid.show(json.message, ToastAndroid.LONG);
-            } catch (error) {
-                ToastAndroid.show("Error deleting notification", ToastAndroid.LONG)
-            }
-        }
 
     // get all the notification
     const handleGetNotification = async () => {
@@ -282,15 +280,15 @@ const States = ({ children }) => {
 
 
     const handleUpdateuser = async (
-        {id,
-        fullname,
-        fathername,
-        roll,
-        department,
-        semester,
-        address,
-        cnic,
-        contact}) => {
+        { id,
+            fullname,
+            fathername,
+            roll,
+            department,
+            semester,
+            address,
+            cnic,
+            contact }) => {
 
         try {
 
@@ -307,9 +305,10 @@ const States = ({ children }) => {
                     roll,
                     department,
                     semester,
-                    address, 
+                    address,
                     cnic,
-                    contact})
+                    contact
+                })
             });
             const json = await response.json();
             if (json.success == true) {
@@ -324,17 +323,17 @@ const States = ({ children }) => {
         }
     }
 
-    const handleAssignDuty = async({id, duty})=>{
+    const handleAssignDuty = async ({ id, duty }) => {
         try {
             const response = await fetch(`http://${homeHost}:8001/assignDuty`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({id,duty})
+                body: JSON.stringify({ id, duty })
             });
             const json = await response.json();
-            
+
             if (json.success !== true) {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
@@ -344,21 +343,21 @@ const States = ({ children }) => {
         }
     }
 
-    const handleCheckIn = async({id,date,latitude,longitude})=>{
+    const handleCheckIn = async ({ id, date, latitude, longitude }) => {
         try {
             const response = await fetch(`http://${homeHost}:8001/checkIn`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({id,date,latitude,longitude})
+                body: JSON.stringify({ id, date, latitude, longitude })
             });
             const json = await response.json();
-            
+
             if (json.success == true) {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
-            else{
+            else {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
 
@@ -367,54 +366,54 @@ const States = ({ children }) => {
         }
     }
 
-    const handleCheckOut = async({id,date,latitude,longitude})=>{
+    const handleCheckOut = async ({ id, date, latitude, longitude }) => {
         try {
             const response = await fetch(`http://${homeHost}:8001/checkOut`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({id,date,latitude,longitude})
+                body: JSON.stringify({ id, date, latitude, longitude })
             });
             const json = await response.json();
-            
+
             if (json.success == true) {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
-            else{
+            else {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
 
         } catch (error) {
             ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
-      }
+    }
 
-      const handleAttendance = async({id,date,status})=>{
+    const handleAttendance = async ({ id, date, status }) => {
         try {
             const response = await fetch(`http://${homeHost}:8001/attendance`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({id,date, status})
+                body: JSON.stringify({ id, date, status })
             });
             const json = await response.json();
-            
+
             if (json.success == true) {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
-            else{
+            else {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
             }
 
         } catch (error) {
             ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
-      }
+    }
 
     return (
-        <Context.Provider value={{ loggedInStatus, handleLogin,handleForgotPassword,handleLogOut, handleSetNotification, handleGetNotification, handleDeleteNotification,notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser,handleAssignDuty,getLocation, location,  handleCheckIn,handleCheckOut,handleAttendance }}>
+        <Context.Provider value={{ loggedInStatus, handleLogin, handleForgotPassword,handlePasswordChange, handleLogOut, handleGetNotification, handleDeleteNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers, registerSpecificUser, deleteSpecificUser, searchUser, getProfileData, profileData, handleUpdateuser, handleAssignDuty, getLocation, location, handleCheckIn, handleCheckOut, handleAttendance }}>
             {children}
         </Context.Provider>
     );

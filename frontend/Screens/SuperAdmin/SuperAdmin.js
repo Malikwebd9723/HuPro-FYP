@@ -7,7 +7,7 @@ import { Context } from "../../context/States";
 
 export default function SuperAdmin() {
     const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.4";
+    const homeHost = "192.168.10.7";
     const context = useContext(Context);
     const {handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers ,getProfileData} = context;
     const theme = useTheme();
