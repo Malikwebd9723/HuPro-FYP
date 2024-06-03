@@ -234,7 +234,7 @@ app.post("/login", async (req, res) => {
         }
         else {
             const SecretKey = "HuProKey";
-            const token = await jwt.sign({ userId: user._id }, SecretKey);
+            const token = await jwt.sign({ userId: user._id }, "hypro");
             const privilege = await user.privilege;
             const id = await user._id;
             return res.status(200).json({ success: true, privilege, token, id, message: "Logged in sucessfuly" })
