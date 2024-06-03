@@ -7,7 +7,7 @@ import { Context } from "../../context/States";
 
 export default function Admin() {
     const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.7";
+    const homeHost = "192.168.10.5";
     const context = useContext(Context);
     const {handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers ,getProfileData} = context;
     const theme = useTheme();
@@ -156,7 +156,7 @@ export default function Admin() {
                     <View style={styles.stateContainer}>
                         <View style={[styles.stateInner, { borderColor: navBg }]}>
                             <Text style={[styles.h4, { color }]}>Registered</Text>
-                            <Text style={[styles.h6, { color }]}>{registeredUsers.length-1}</Text>
+                            <Text style={[styles.h6, { color }]}>{registeredUsers.length}</Text>
                         </View>
                         <View style={[styles.stateInner, { borderColor: navBg }]}>
                             <Text style={[styles.h4, { color }]}>Applicants</Text>

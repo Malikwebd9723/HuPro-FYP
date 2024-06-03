@@ -7,8 +7,8 @@ import Geolocation from 'react-native-geolocation-service';
 const Context = createContext();
 
 const States = ({ children }) => {
-    const homeHost = "192.168.10.7";
-    // const homeHost = "10.121.28.223";
+    // const homeHost = "192.168.10.5";
+    const homeHost = "192.168.84.140";
     const navigation = useNavigation();
 
     // all the states goes here
@@ -17,9 +17,6 @@ const States = ({ children }) => {
     const [applicantUsers, setApplicantUsers] = useState([]);
     const [profileData, setProfileData] = useState([])
     const [location, setLocation] = useState(false);
-
-
-
 
     const requestLocationPermission = async () => {
         try {
@@ -107,26 +104,27 @@ const States = ({ children }) => {
             }
 
         } catch (error) {
-            ToastAndroid.show(error.message, ToastAndroid.LONG)
+            ToastAndroid.show("Network Error!", ToastAndroid.LONG)
         }
     }
     const handleForgotPassword = async ({ email }) => {
-
-        // () => navigation.navigate("Login")
-        const response = await fetch(`http://${homeHost}:8001/forgotpassword`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email })
-        });
-
-        const json = await response.json();
-        if (json.success) {
-            ToastAndroid.show(json.message, ToastAndroid.LONG)
-            navigation.navigate("Login")
-        } else {
-            ToastAndroid.show(json.message, ToastAndroid.LONG)
+        try {
+            const response = await fetch(`http://${homeHost}:8001/forgotpassword`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email })
+            });
+    
+            const json = await response.json();
+            if (json.success) {
+                ToastAndroid.show(json.message, ToastAndroid.LONG);
+            } else {
+                ToastAndroid.show(json.message, ToastAndroid.LONG);
+            }
+        } catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.LONG)
         }
     }
 

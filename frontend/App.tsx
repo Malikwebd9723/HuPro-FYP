@@ -1,5 +1,7 @@
+import { useColorScheme } from "react-native";
 import Navigation from "./Navigations/Navigation";
 import { ThemeProvider } from 'styled-components'; // Or your preferred theming library
+
 // const lightTheme = {
 //   bg: '#D3D0CBFF',
 //   navBg:"#6E8898FF",
@@ -20,8 +22,9 @@ const darkTheme = {
 
 
 export default function App() {
-
+  // const selectedtheme = useColorScheme();
   return (
+    // theme={selectedtheme == "light"? lightTheme : darkTheme}
     <ThemeProvider theme={darkTheme}>
     <Navigation />
     </ThemeProvider>

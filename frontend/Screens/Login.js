@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, KeyboardAvoidingView, View, Text, TextInput, TouchableOpacity, ToastAndroid } from "react-native";
+import { StyleSheet, ScrollView, KeyboardAvoidingView, View, Text, TextInput, TouchableOpacity, ToastAndroid, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useContext } from "react";
 import { Context } from "../context/States";
@@ -18,11 +18,14 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const[showPass,setShowPass] = useState(true);
+    const [load,setLoad] = useState(false);
 
-    const callHandleLogin=()=>{
-        handleLogin({email, password});
+    const callHandleLogin=async ()=>{
+        setLoad(true);
+        await handleLogin({email, password});
         setEmail("");
         setPassword("");
+        setLoad(false)
     }
     useEffect(() => {
         // check the user logged in status to navigate according to privilege
@@ -32,12 +35,13 @@ export default function Login() {
         <>
             <ScrollView>
                 <View style={[styles.firstContainer,{backgroundColor:navBg}]}>
-                    <Text style={styles.h1}>HuPro</Text>
+                    <Text style={[styles.h1,{color:colorDark}]}>HuPro</Text>
 
-                    <Text style={styles.h2}>Login to your Account</Text>
+                    <Text style={[styles.h2,{color:colorDark}]}>Login to your Account</Text>
                 </View>
 
                 <KeyboardAvoidingView >
+                    {load ? <ActivityIndicator size={30} color={colorDark}/>:
                     <View style={styles.secondContainer}>
 
                         <TextInput value={email} style={[styles.input,{backgroundColor:boxbg}]} placeholder="Enter your email" keyboardType="email-address" onChangeText={(text) => { setEmail(text) }} />
@@ -60,7 +64,7 @@ export default function Login() {
                             <Text style={{ color: "blue" }}>Not yet registered?</Text>
                         </TouchableOpacity>
 
-                    </View>
+                    </View>}
                 </KeyboardAvoidingView>
             </ScrollView>
         </>

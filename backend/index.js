@@ -112,37 +112,37 @@ app.post("/deleteNotification", async (req, res) => {
     }
 })
 
-//endpoint to register user
-app.post("/register", async (req, res) => {
-    try {
-        const { fullname, fathername, email, gender, dutyPlace, roll = 0, department, semester = 0, address, cnic, contact } = req.body;
+    //endpoint to register user
+    app.post("/register", async (req, res) => {
+        try {
+            const { fullname, fathername, email, gender, dutyPlace, roll = 0, department, semester = 0, address, cnic, contact } = req.body;
 
-        // Check if user already exists based on email or roll
-        const existingUser = await User.findOne({ $or: [{ email }, { roll }] })
+            // Check if user already exists based on email or roll
+            const existingUser = await User.findOne({ $or: [{ email }, { roll }] })
 
-        if (existingUser) {
-            console.log("User already exists");
-            return res.status(400).json({ message: "User already registered try another Email or Roll No" });
-        } else {
-            //generate verification token
-            const verificationToken = await crypto.randomBytes(20).toString("hex");
+            if (existingUser) {
+                console.log("User already exists");
+                return res.status(400).json({ message: "User already registered try another Email or Roll No" });
+            } else {
+                //generate verification token
+                const verificationToken = await crypto.randomBytes(20).toString("hex");
 
-            // Create a new user document
-            const newUser = await new User({ fullname, fathername, email, gender, roll, dutyPlace, department, semester, address, cnic, contact, verificationToken });
+                // Create a new user document
+                const newUser = await new User({ fullname, fathername, email, gender, roll, dutyPlace, department, semester, address, cnic, contact, verificationToken });
 
-            // Save the new user to the database
-            await newUser.save();
+                // Save the new user to the database
+                await newUser.save();
 
-            //sending email to verify user email
-            handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: http://${homeHost}:8001/verify/${newUser.verificationToken}`);
+                //sending email to verify user email
+                handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: http://${homeHost}:8001/verify/${newUser.verificationToken}`);
 
-            return res.status(201).json({ success: true, message: "Registered successfully, check your email for verification" });
+                return res.status(201).json({ success: true, message: "Registered successfully, check your email for verification" });
+            }
+        } catch (error) {
+            console.error("Error during registration:", error); // Log the specific error
+            return res.status(500).json({ message: "Registration failed" });
         }
-    } catch (error) {
-        console.error("Error during registration:", error); // Log the specific error
-        return res.status(500).json({ message: "Registration failed" });
-    }
-});
+    });
 
 
 
@@ -178,7 +178,7 @@ app.post("/forgotpassword", async (req, res) => {
 
         if (user && user.userVerified) {
             //generate new password
-            const digits = user.fullname + user.roll;
+            const digits = "123456789huprosmartapp";
             let password = "";
 
             // Generate 7 random digits
@@ -186,8 +186,8 @@ app.post("/forgotpassword", async (req, res) => {
                 password += digits[Math.floor(Math.random() * digits.length)];
             }
             //send email for password reset and update
-            handleSendEmail(user.email, "Password reset from HuPro", `Your Email is ${user.email}
-        Password is ${password.replace(/\s+/g, '')}`)
+            await handleSendEmail(user.email, "Password reset from HuPro", `Your Email is ${user.email}
+        Password is: ${password.replace(/\s+/g, '')}`)
 
             user.password = password;
             await user.save()

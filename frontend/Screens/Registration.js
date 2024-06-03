@@ -12,7 +12,7 @@ export default function Registration() {
     const navBg = theme.navBg;
     const colorDark = theme.textDark;
     // const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.12";
+    const homeHost = "192.168.10.10";
     const navigation = useNavigation();
     const [selectedGender, setSelectedGender] = useState("");
     const [cred, setCred] = useState({
@@ -154,7 +154,7 @@ export default function Registration() {
 };
 
 const styles = StyleSheet.create({
-    firstContainer: { paddingVertical: 50, borderBottomWidth: 1, borderRadius: 20},
+    firstContainer: { paddingVertical: 50, borderBottomWidth: 1, borderBottomRightRadius:20,borderBottomLeftRadius:20},
     h1: { textAlign: "center", fontSize: 35, fontWeight: "900" },
     h2: { textAlign: "center", fontSize: 20, fontWeight: "400" },
     secondContainer: { alignItems: "center", gap: 10, paddingVertical: 30 },

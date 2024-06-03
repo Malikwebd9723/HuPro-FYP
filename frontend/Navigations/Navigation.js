@@ -47,7 +47,7 @@ export default function StackNavigator() {
             component={SuperAdmin}
             options={{
               tabBarLabel: "Home",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -63,7 +63,7 @@ export default function StackNavigator() {
             component={SuperAdminUserData}
             options={{
               tabBarLabel: "Proctors",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -78,7 +78,7 @@ export default function StackNavigator() {
             component={SuperAdminDuties}
             options={{
               tabBarLabel: "Duties",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -93,7 +93,7 @@ export default function StackNavigator() {
             component={SuperAdminProfile}
             options={{
               tabBarLabel: "Profile",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -118,7 +118,7 @@ export default function StackNavigator() {
             component={Admin}
             options={{
               tabBarLabel: "Home",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -134,7 +134,7 @@ export default function StackNavigator() {
             component={AdminUserData}
             options={{
               tabBarLabel: "Proctors",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -149,7 +149,7 @@ export default function StackNavigator() {
             component={AdminDuties}
             options={{
               tabBarLabel: "Duties",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -164,7 +164,7 @@ export default function StackNavigator() {
             component={AddDuties}
             options={{
               tabBarLabel: "Assign Duties",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -179,7 +179,7 @@ export default function StackNavigator() {
             component={AdminProfile}
             options={{
               tabBarLabel: "Profile",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -203,7 +203,7 @@ export default function StackNavigator() {
             component={User}
             options={{
               tabBarLabel: "Home",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -219,7 +219,7 @@ export default function StackNavigator() {
             component={UserAttendance}
             options={{
               tabBarLabel: "Attendance",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color, fontSize:12 },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
@@ -234,7 +234,7 @@ export default function StackNavigator() {
             component={UserProfile}
             options={{
               tabBarLabel: "Profile",
-              tabBarLabelStyle: { color: "#008E97" },
+              tabBarLabelStyle: { color },
               headerShown: false,
               tabBarIcon: ({ focused }) =>
                 focused ? (
