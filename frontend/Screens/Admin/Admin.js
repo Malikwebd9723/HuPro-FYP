@@ -7,7 +7,7 @@ import { Context } from "../../context/States";
 
 export default function Admin() {
     const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.5";
+    const homeHost = "https://hu-pro-fyp.vercel.app";
     const context = useContext(Context);
     const {handleGetNotification, notificationData, getRegisteredUsers, registeredUsers, getApplicantUsers, applicantUsers ,getProfileData} = context;
     const theme = useTheme();
@@ -64,7 +64,7 @@ export default function Admin() {
         try {
             setLoad(true);
             if (message !== "" && catToShow !== "") {
-                const response = await fetch(`http://${homeHost}:8001/setNotification`, {
+                const response = await fetch(`${homeHost}/setNotification`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -89,7 +89,7 @@ export default function Admin() {
     // delete notification from database
     const handleDeleteNotification = async (id) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/deleteNotification`, {
+            const response = await fetch(`${homeHost}/deleteNotification`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

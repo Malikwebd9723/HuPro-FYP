@@ -12,7 +12,7 @@ export default function Registration() {
     const navBg = theme.navBg;
     const colorDark = theme.textDark;
     // const uniHost = "172.26.160.1";
-    const homeHost = "192.168.10.10";
+    const homeHost = "https://hu-pro-fyp.vercel.app";
     const navigation = useNavigation();
     const [selectedGender, setSelectedGender] = useState("");
     const [cred, setCred] = useState({
@@ -54,7 +54,7 @@ export default function Registration() {
         try {
 
 
-            const response = await fetch(`http://${homeHost}:8001/register`, {
+            const response = await fetch(`${homeHost}/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

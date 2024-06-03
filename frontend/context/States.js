@@ -33,10 +33,8 @@ const States = ({ children }) => {
             );
             console.log('granted', granted);
             if (granted === 'granted') {
-                console.log('You can use Geolocation');
                 return true;
             } else {
-                console.log('You cannot use Geolocation');
                 return false;
             }
         } catch (err) {
@@ -61,7 +59,6 @@ const States = ({ children }) => {
                 );
             }
         });
-        console.log(location);
     };
 
 
@@ -110,7 +107,7 @@ const States = ({ children }) => {
     }
     const handleForgotPassword = async ({ email }) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/forgotpassword`, {
+            const response = await fetch(`${homeHost}/forgotpassword`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -131,7 +128,7 @@ const States = ({ children }) => {
 
     const handlePasswordChange = async ({ id, oldPwd, newPwd }) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/changePassword`, {
+            const response = await fetch(`${homeHost}/changePassword`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -162,7 +159,7 @@ const States = ({ children }) => {
     // delete notification from database
     const handleDeleteNotification = async (id) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/deleteNotification`, {
+            const response = await fetch(`${homeHost}/deleteNotification`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -180,7 +177,7 @@ const States = ({ children }) => {
     // get all the notification
     const handleGetNotification = async () => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/getNotification`)
+            const response = await fetch(`${homeHost}/getNotification`)
             const json = await response.json();
             setNotificationData(json);
         } catch (error) {
@@ -191,7 +188,7 @@ const States = ({ children }) => {
     // get all the registered users
     const getRegisteredUsers = async () => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/getRegisteredUsers`)
+            const response = await fetch(`${homeHost}/getRegisteredUsers`)
             const json = await response.json();
             setRegisteredUsers(json.data);
         } catch (error) {
@@ -202,7 +199,7 @@ const States = ({ children }) => {
     // get all the registered users
     const getApplicantUsers = async () => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/getApplicantUsers`)
+            const response = await fetch(`${homeHost}/getApplicantUsers`)
             const json = await response.json();
             setApplicantUsers(json.data);
         } catch (error) {
@@ -213,7 +210,7 @@ const States = ({ children }) => {
     // register a specific user
     const registerSpecificUser = async (id) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/registerSpecificUser`, {
+            const response = await fetch(`${homeHost}/registerSpecificUser`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -232,7 +229,7 @@ const States = ({ children }) => {
     // register a specific user
     const deleteSpecificUser = async (id) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/deleteSpecificUser`, {
+            const response = await fetch(`${homeHost}/deleteSpecificUser`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -263,7 +260,7 @@ const States = ({ children }) => {
 
     const getProfileData = async (id) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/profileData`, {
+            const response = await fetch(`${homeHost}/profileData`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -292,7 +289,7 @@ const States = ({ children }) => {
         try {
 
 
-            const response = await fetch(`http://${homeHost}:8001/updateDetails`, {
+            const response = await fetch(`${homeHost}/updateDetails`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -324,7 +321,7 @@ const States = ({ children }) => {
 
     const handleAssignDuty = async ({ id, duty }) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/assignDuty`, {
+            const response = await fetch(`${homeHost}/assignDuty`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -344,7 +341,7 @@ const States = ({ children }) => {
 
     const handleCheckIn = async ({ id, date, latitude, longitude }) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/checkIn`, {
+            const response = await fetch(`${homeHost}/checkIn`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -367,7 +364,7 @@ const States = ({ children }) => {
 
     const handleCheckOut = async ({ id, date, latitude, longitude }) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/checkOut`, {
+            const response = await fetch(`${homeHost}/checkOut`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -390,7 +387,7 @@ const States = ({ children }) => {
 
     const handleAttendance = async ({ id, date, status }) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/attendance`, {
+            const response = await fetch(`${homeHost}/attendance`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
