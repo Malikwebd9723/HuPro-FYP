@@ -8,7 +8,8 @@ const Context = createContext();
 
 const States = ({ children }) => {
     // const homeHost = "192.168.10.5";
-    const homeHost = "192.168.84.140";
+    // const homeHost = "192.168.84.140";
+    const homeHost = "https://hu-pro-fyp.vercel.app"
     const navigation = useNavigation();
 
     // all the states goes here
@@ -81,7 +82,7 @@ const States = ({ children }) => {
     // login Route for any user
     const handleLogin = async ({ email, password }) => {
         try {
-            const response = await fetch(`http://${homeHost}:8001/login`, {
+            const response = await fetch(`${homeHost}/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

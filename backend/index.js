@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 const dbPass = process.env.ATLAS_DB_PASS;
 mongoose
-    .connect(`mongodb+srv://developer9723usman:${dbPass}@cluster0.x3kffoi.mongodb.net/Users`)
+    .connect(`mongodb+srv://developer9723usman:huproatlasdb@cluster0.x3kffoi.mongodb.net/Users`)
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -233,7 +233,7 @@ app.post("/login", async (req, res) => {
             return res.status(401).json({ message: "Invalid password" })
         }
         else {
-            const SecretKey = process.env.SECRET_key;
+            const SecretKey = "HuProKey";
             const token = await jwt.sign({ userId: user._id }, SecretKey);
             const privilege = await user.privilege;
             const id = await user._id;
