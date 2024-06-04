@@ -65,11 +65,11 @@ const userSchema = new mongoose.Schema({
   },
   checkIn:{
     type:Array,
-    default:[{time:"",date:"",latitude:"",longitude:""}]
+    default:[{time:{ type: Date, default: Date.now },date:"",latitude:"",longitude:""}]
   },
   checkOut:{
     type:Array,
-    default:[{time:"",date:"",latitude:"",longitude:""}]
+    default:[{time:{ type: Date, default: Date.now },date:"",latitude:"",longitude:""}]
   },
   emailVerified: {
     type: Boolean,

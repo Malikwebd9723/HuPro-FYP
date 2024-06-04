@@ -44,7 +44,7 @@ export default function User() {
       `Sure to CheckIn?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id, time:fullDate, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
+        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
     await AsyncStorage.setItem("checkInDate", date)
@@ -57,7 +57,7 @@ export default function User() {
       `Sure to CheckIn?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id, time:fullDate, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
+        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
     await AsyncStorage.setItem("checkOutDate", date)
