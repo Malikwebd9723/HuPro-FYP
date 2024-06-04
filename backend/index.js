@@ -112,37 +112,37 @@ app.post("/deleteNotification", async (req, res) => {
     }
 })
 
-    //endpoint to register user
-    app.post("/register", async (req, res) => {
-        try {
-            const { fullname, fathername, email, gender, dutyPlace, roll = 0, department, semester = 0, address, cnic, contact } = req.body;
+//endpoint to register user
+app.post("/register", async (req, res) => {
+    try {
+        const { fullname, fathername, email, gender, dutyPlace, roll = 0, department, semester = 0, address, cnic, contact } = req.body;
 
-            // Check if user already exists based on email or roll
-            const existingUser = await User.findOne({ $or: [{ email }, { roll }] })
+        // Check if user already exists based on email or roll
+        const existingUser = await User.findOne({ $or: [{ email }, { roll }] })
 
-            if (existingUser) {
-                console.log("User already exists");
-                return res.status(400).json({ message: "User already registered try another Email or Roll No" });
-            } else {
-                //generate verification token
-                const verificationToken = await crypto.randomBytes(20).toString("hex");
+        if (existingUser) {
+            console.log("User already exists");
+            return res.status(400).json({ message: "User already registered try another Email or Roll No" });
+        } else {
+            //generate verification token
+            const verificationToken = await crypto.randomBytes(20).toString("hex");
 
-                // Create a new user document
-                const newUser = await new User({ fullname, fathername, email, gender, roll, dutyPlace, department, semester, address, cnic, contact, verificationToken });
+            // Create a new user document
+            const newUser = await new User({ fullname, fathername, email, gender, roll, dutyPlace, department, semester, address, cnic, contact, verificationToken });
 
-                // Save the new user to the database
-                await newUser.save();
+            // Save the new user to the database
+            await newUser.save();
 
-                //sending email to verify user email
-                handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: ${homeHost}/verify/${newUser.verificationToken}`);
+            //sending email to verify user email
+            handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: ${homeHost}/verify/${newUser.verificationToken}`);
 
-                return res.status(201).json({ success: true, message: "Registered successfully, check your email for verification" });
-            }
-        } catch (error) {
-            console.error("Error during registration:", error); // Log the specific error
-            return res.status(500).json({ message: "Registration failed" });
+            return res.status(201).json({ success: true, message: "Registered successfully, check your email for verification" });
         }
-    });
+    } catch (error) {
+        console.error("Error during registration:", error); // Log the specific error
+        return res.status(500).json({ message: "Registration failed" });
+    }
+});
 
 
 
@@ -205,7 +205,7 @@ app.post("/forgotpassword", async (req, res) => {
 app.post("/changePassword", async (req, res) => {
     try {
         const { id, oldPwd, newPwd } = req.body;
-        const user = await User.findOne({_id:id });
+        const user = await User.findOne({ _id: id });
 
 
         if (user && user.password == oldPwd) {
@@ -288,8 +288,24 @@ app.post("/registerSpecificUser", async (req, res) => {
             return res.status(401).json({ message: "No user found" })
         }
         else {
+            const digits = "123456789huprosmartapp";
+            let password = "";
+
+            // Generate 7 random digits
+            for (let i = 0; i < 7; i++) {
+                password += digits[Math.floor(Math.random() * digits.length)];
+            }
+            user.password = password;
             user.userVerified = true;
             await user.save();
+            //send email for login
+            await handleSendEmail(user.email, `Registeration from HuPro`, ` Hello ${user.fullname}!
+            Congratulation for registeration.
+            Now you can login to your account with these credentials.
+            Email: ${user.email}.
+            Password: ${password.replace(/\s+/g, '')}.`)
+
+
             return res.status(200).json({ message: "User registered succesfully" })
         }
     } catch (error) {
@@ -324,12 +340,12 @@ app.post("/profileData", async (req, res) => {
     }
 })
 
-app.post("/updateDetails",async (req,res)=>{
+app.post("/updateDetails", async (req, res) => {
     try {
-        const{id,fullname,fathername,roll,department,semester,address,cnic,contact} = req.body;
-        const user = await User.findOne({_id:id});
+        const { id, fullname, fathername, roll, department, semester, address, cnic, contact } = req.body;
+        const user = await User.findOne({ _id: id });
         if (!user) {
-            return req.status(401).json({success:false, message:"Try another email!"})
+            return req.status(401).json({ success: false, message: "Try another email!" })
         } else {
             user.fullname = fullname;
             user.fathername = fathername;
@@ -341,78 +357,78 @@ app.post("/updateDetails",async (req,res)=>{
             user.contact = contact;
 
             await user.save();
-            return res.status(200).json({success:true, message: "Profile updated succesfully" })
+            return res.status(200).json({ success: true, message: "Profile updated succesfully" })
         }
     } catch (error) {
-        return res.status(500).json({success:false, message: "Internal server error!" })
+        return res.status(500).json({ success: false, message: "Internal server error!" })
     }
 });
 
-app.post("/assignDuty",async (req,res)=>{
+app.post("/assignDuty", async (req, res) => {
     try {
-        const{id, duty} = req.body;
-        const user = await User.findOne({_id:id});
+        const { id, duty } = req.body;
+        const user = await User.findOne({ _id: id });
         if (!user) {
-            return res.status(401).json({success:false, message:"Something went wrong!"})
+            return res.status(401).json({ success: false, message: "Something went wrong!" })
         } else {
             user.dutyPlace = duty;
             await user.save();
-            return res.status(200).json({success:true, message: "Duty assigned!" })
+            return res.status(200).json({ success: true, message: "Duty assigned!" })
         }
     } catch (error) {
-        return res.status(500).json({success:false, message: "Internal server error!" })
+        return res.status(500).json({ success: false, message: "Internal server error!" })
 
     }
 })
 
-app.post("/checkIn",async (req,res)=>{
+app.post("/checkIn", async (req, res) => {
     try {
-        const{id, date,latitude,longitude} = req.body;
-        const user = await User.findOne({_id:id});
+        const { id, date, latitude, longitude } = req.body;
+        const user = await User.findOne({ _id: id });
         if (!user) {
-            return res.status(401).json({success:false, message:"Something went wrong!"})
+            return res.status(401).json({ success: false, message: "Something went wrong!" })
         } else {
-            await user.updateOne({$set:{checkIn:{date,latitude,longitude}} })
+            await user.updateOne({ $set: { checkIn: { date, latitude, longitude } } })
             await user.save();
-            return res.status(200).json({success:true, message: "CheckedIn Successfully!" })
+            return res.status(200).json({ success: true, message: "CheckedIn Successfully!" })
         }
     } catch (error) {
-        return res.status(500).json({success:false, message: error.message })
+        return res.status(500).json({ success: false, message: error.message })
 
     }
 })
 
-app.post("/checkOut",async (req,res)=>{
+app.post("/checkOut", async (req, res) => {
     try {
-        const{id, date,latitude,longitude} = req.body;
-        const user = await User.findOne({_id:id});
+        const { id, date, latitude, longitude } = req.body;
+        const user = await User.findOne({ _id: id });
         if (!user && user.checkIn == user.checkOut) {
-            return res.status(401).json({success:false, message:"Something went wrong!"})
+            return res.status(401).json({ success: false, message: "Something went wrong!" })
         } else {
-            await user.updateOne({$set:{checkOut:{date,latitude,longitude}} })
+            await user.updateOne({ $set: { checkOut: { date, latitude, longitude } } })
             await user.save();
-            return res.status(200).json({success:true, message: "CheckedOut Successfully!" })
+            return res.status(200).json({ success: true, message: "CheckedOut Successfully!" })
         }
     } catch (error) {
-        return res.status(500).json({success:false, message: error.message })
+        return res.status(500).json({ success: false, message: error.message })
 
     }
 });
 
-app.post("/attendance",async (req,res)=>{
+app.post("/attendance", async (req, res) => {
     try {
-        const{id, date, status} = req.body;
-        const user = await User.findOne({_id:id});
+        const { id, date, status } = req.body;
+        const user = await User.findOne({ _id: id });
         if (!user) {
-            return res.status(401).json({success:false, message:"Something went wrong!"})
+            return res.status(401).json({ success: false, message: "Something went wrong!" })
         } else {
-            await user.updateOne({$push:{attendance:{date,status}} })
-            await user.updateOne({$set:{lastattendance:{date,status}} })
+            await user.updateOne({ $push: { attendance: { date, status } } })
+            await user.updateOne({ $set: { lastattendance: { date, status } } })
             await user.save();
-            return res.status(200).json({success:true, message: "Attendance marked!" })
+            return res.status(200).json({ success: true, message: "Attendance marked!" })
         }
     } catch (error) {
-        return res.status(500).json({success:false, message: error.message })
+        return res.status(500).json({ success: false, message: error.message })
 
     }
 })
