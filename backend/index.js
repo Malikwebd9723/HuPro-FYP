@@ -33,7 +33,7 @@ const User = require("./models/users");
 const Notification = require('./models/notification');
 
 const uniHost = "192.168.128.140";
-const homeHost = "192.168.10.14";
+const homeHost = "https://hu-pro-fyp.vercel.app";
 // trgg ptmi yfsd osks
 
 // to verify user email
@@ -134,7 +134,7 @@ app.post("/deleteNotification", async (req, res) => {
                 await newUser.save();
 
                 //sending email to verify user email
-                handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: http://${homeHost}:8001/verify/${newUser.verificationToken}`);
+                handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: ${homeHost}/verify/${newUser.verificationToken}`);
 
                 return res.status(201).json({ success: true, message: "Registered successfully, check your email for verification" });
             }
