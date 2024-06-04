@@ -27,7 +27,7 @@ export default function ForgotPass() {
 
     return (
         <>
-            <ScrollView>
+            <ScrollView style={[{ backgroundColor}]}>
                 <View style={[styles.firstContainer, { backgroundColor: navBg }]}>
                     <Text style={[styles.h1, { color: colorDark }]}>HuPro</Text>
 
@@ -35,7 +35,7 @@ export default function ForgotPass() {
                 </View>
 
                 <KeyboardAvoidingView >
-                    {load ? <ActivityIndicator size={50} /> :
+                    {load ? <ActivityIndicator size={30} color={color} /> :
                         <View style={styles.secondContainer}>
                             <Text style={styles.text}>To reset password your email should be verified by HuPro</Text>
 

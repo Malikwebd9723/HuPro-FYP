@@ -33,7 +33,7 @@ export default function Login() {
     }, [])
     return (
         <>
-            <ScrollView>
+            <ScrollView style={[{backgroundColor}]}>
                 <View style={[styles.firstContainer,{backgroundColor:navBg}]}>
                     <Text style={[styles.h1,{color:colorDark}]}>HuPro</Text>
 
@@ -41,14 +41,14 @@ export default function Login() {
                 </View>
 
                 <KeyboardAvoidingView >
-                    {load ? <ActivityIndicator size={30} color={colorDark}/>:
+                    {load ? <ActivityIndicator size={30} color={color}/>:
                     <View style={styles.secondContainer}>
 
                         <TextInput value={email} style={[styles.input,{backgroundColor:boxbg}]} placeholder="Enter your email" keyboardType="email-address" onChangeText={(text) => { setEmail(text) }} />
 
                         <TextInput value={password} style={[styles.input,{backgroundColor:boxbg}]} placeholder="Password" secureTextEntry={showPass} onChangeText={(text) => { setPassword(text) }} />
                         
-                        <TouchableOpacity onPress={()=>setShowPass(!showPass)}><Text style={[{color:colorDark}]}>{showPass?"Show Password":"Hide Password"}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>setShowPass(!showPass)}><Text style={[{color}]}>{showPass?"Show Password":"Hide Password"}</Text></TouchableOpacity>
                         
                         <TouchableOpacity onPress={()=>callHandleLogin()} style={styles.loginBtn}>
 
@@ -57,11 +57,11 @@ export default function Login() {
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => navigation.navigate("ForgotPass")}>
-                            <Text style={{ color: "blue" }}>Forgot password?</Text>
+                            <Text style={{ color }}>Forgot password?</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
-                            <Text style={{ color: "blue" }}>Not yet registered?</Text>
+                            <Text style={{ color}}>Not yet registered?</Text>
                         </TouchableOpacity>
 
                     </View>}
