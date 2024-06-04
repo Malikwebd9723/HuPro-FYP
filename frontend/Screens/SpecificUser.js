@@ -97,16 +97,16 @@ export default function UserData() {
                             </View>
                             {item.attendance.slice(1).map((item) => {
                                 return (
-                                            <View key={item.date} style={[styles.detailContainerInner]}>
-                                                <Text style={[{ color }]}>{item.status}</Text>
-                                                <Text style={[{ color }]}>{item.date}</Text>
-                                            </View>
+                                    <View key={item.date} style={[styles.detailContainerInner]}>
+                                        <Text style={[{ color }]}>{item.status}</Text>
+                                        <Text style={[{ color }]}>{item.date}</Text>
+                                    </View>
                                 )
                             })}
                         </ScrollView> : ""}
                     {item.checkIn[0].date == date ?
                         <>
-                            <Text style={[{ color, fontSize: 20, fontWeight: "600", textAlign: "center" }]}>CheckIn Location</Text>
+                            <Text style={[{ color, fontSize: 20, fontWeight: "600", textAlign: "center" }]}>CheckIn at {item.checkIn[0].time.split("T")[1]}</Text>
                             <View style={[styles.container, { borderColor: boxbg }]}>
                                 <MapView
                                     style={styles.map}
@@ -125,18 +125,18 @@ export default function UserData() {
                                 <>
                                     <Text style={[{ color, fontSize: 20, fontWeight: "600", textAlign: "center" }]}>CheckOut Location</Text>
                                     <View style={[styles.container, { borderColor: boxbg }]}>
-                                    <MapView
-                                    style={styles.map}
-                                    region={checkOutCoords}
-                                    initialZoom={20}
-                                    mapType="hybrid"
-                                >
-                                    <Marker
-                                        coordinate={checkOutCoords} // Specify coordinates for the marker
-                                        title="Check-Out Location" // Optional title displayed on tap
-                                        description="This is where they checked out." // Optional description (iOS only)
-                                    />
-                                </MapView>
+                                        <MapView
+                                            style={styles.map}
+                                            region={checkOutCoords}
+                                            initialZoom={20}
+                                            mapType="hybrid"
+                                        >
+                                            <Marker
+                                                coordinate={checkOutCoords} // Specify coordinates for the marker
+                                                title="Check-Out Location" // Optional title displayed on tap
+                                                description="This is where they checked out." // Optional description (iOS only)
+                                            />
+                                        </MapView>
                                     </View>
                                 </> : ""}
                         </> : ""}

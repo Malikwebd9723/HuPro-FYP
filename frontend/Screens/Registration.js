@@ -79,6 +79,7 @@ export default function Registration() {
                 })
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
                 setLoad(false)
+                navigation.navigate("Login")
             } else {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
                 setLoad(false)
