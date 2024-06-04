@@ -65,11 +65,11 @@ const userSchema = new mongoose.Schema({
   },
   checkIn:{
     type:Array,
-    default:[{time:{ type: Date, default: Date.now },date:"",latitude:"",longitude:""}]
+    default:[{date:"",latitude:"",longitude:""}]
   },
   checkOut:{
     type:Array,
-    default:[{time:{ type: Date, default: Date.now },date:"",latitude:"",longitude:""}]
+    default:[{date:"",latitude:"",longitude:""}]
   },
   emailVerified: {
     type: Boolean,
@@ -83,6 +83,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+
+  //   orders: [
+  //     {
+  //       type: mongoose.Schema.Types.ObjectId,
+  //       ref: "Order",
+  //     },
+  //   ],
   createdAt: {
     type: Date,
     default: Date.now,
