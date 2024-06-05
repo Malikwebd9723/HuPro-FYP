@@ -134,7 +134,7 @@ app.post("/register", async (req, res) => {
             await newUser.save();
 
             //sending email to verify user email
-            handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: ${homeHost}/verify/${newUser.verificationToken}`);
+            await handleSendEmail(newUser.email, "Email Verification from HuPro", `Please click the following link to verify your email: ${homeHost}/verify/${newUser.verificationToken}`);
 
             return res.status(201).json({ success: true, message: "Registered successfully, check your email for verification" });
         }
