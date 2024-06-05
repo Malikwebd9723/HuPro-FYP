@@ -27,7 +27,6 @@ export default function User() {
   const getId = async () => {
     const userId = await AsyncStorage.getItem("user");
     getProfileData(userId);
-
   }
 
   //  get today date
@@ -84,7 +83,7 @@ export default function User() {
       <View style={[Styles.mainContainer, { backgroundColor }]}>
         <TopNav text={"HuPro"} />
         {
-          loading ? <ActivityIndicator size="large" /> :
+          loading ? <ActivityIndicator size={30} color={color} /> :
             <ScrollView>
               <Text style={[Styles.name, { color }]}>Greetings, {profileData.fullname}</Text>
 

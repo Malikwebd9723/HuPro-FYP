@@ -106,7 +106,7 @@ export default function UserData() {
                         </ScrollView> : ""}
                     {item.checkIn[0].date == date ?
                         <>
-                            <Text style={[{ color, fontSize: 20, fontWeight: "600", textAlign: "center" }]}>CheckIn at {item.checkIn[0].time.split("T")[1]}</Text>
+                            <Text style={[{ color, fontSize: 20, fontWeight: "600", textAlign: "center" }]}>CheckIn</Text>
                             <View style={[styles.container, { borderColor: boxbg }]}>
                                 <MapView
                                     style={styles.map}
@@ -123,7 +123,7 @@ export default function UserData() {
                             </View>
                             {item.checkOut[0].date == date ?
                                 <>
-                                    <Text style={[{ color, fontSize: 20, fontWeight: "600", textAlign: "center" }]}>CheckOut Location</Text>
+                                    <Text style={[{ color, fontSize: 20, fontWeight: "600", textAlign: "center" }]}>CheckOut</Text>
                                     <View style={[styles.container, { borderColor: boxbg }]}>
                                         <MapView
                                             style={styles.map}
