@@ -69,7 +69,7 @@ const States = ({ children }) => {
             const token = await AsyncStorage.getItem("authToken");
             const privilege = await AsyncStorage.getItem("privilege")
             if (token) {
-                navigation.navigate(privilege)
+                return privilege;
             }
         } catch (error) {
             console.log(error.message);
@@ -94,8 +94,9 @@ const States = ({ children }) => {
                 await AsyncStorage.setItem("authToken", token);
                 await AsyncStorage.setItem("privilege", privilege);
                 await AsyncStorage.setItem("user", id);
-                navigation.navigate(privilege);
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
+                const res = {success:true, route: privilege}
+                return res;
             }
             else {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
