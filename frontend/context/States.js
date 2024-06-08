@@ -239,11 +239,12 @@ const States = ({ children }) => {
             });
             const json = await response.json();
             ToastAndroid.show(json.message, ToastAndroid.LONG)
-            await getRegisteredUsers();
+            navigation.goBack(); 
+            await getRegisteredUsers(); 
             await getApplicantUsers();
         } catch (error) {
             ToastAndroid.show("Error during deletion", ToastAndroid.LONG)
-        }
+        } 
     }
 
     // search user function

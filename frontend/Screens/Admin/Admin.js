@@ -23,6 +23,7 @@ export default function Admin() {
     const [catToShow, setCatToShow] = useState("")
     const [message, setMessage] = useState("");
     const [load,setLoad] = useState(false);
+    const [screenLoad,setScreenLoad] = useState(true)
 
     // show modal to add notification
     const addNotification = () => {
@@ -47,12 +48,13 @@ export default function Admin() {
 
     // fetch all the notification on start
     useEffect(() => {
-        handleGetNotification();
-        getRegisteredUsers();
-        getApplicantUsers();
         const getId = async()=>{
             const userId = await AsyncStorage.getItem("user");
             getProfileData(userId);
+            handleGetNotification();
+            getRegisteredUsers();
+            getApplicantUsers();
+            setScreenLoad(false)
         }
         getId();
     }, [isModalVisible, message])
@@ -105,6 +107,7 @@ export default function Admin() {
     }
     return (
         <View style={{flex:1}}>
+            {screenLoad ? <View style={{flex:1, justifyContent:"center", backgroundColor}}><ActivityIndicator size={40} color={color}/></View> :
             <ScrollView style={[styles.mainContainer, { backgroundColor }]}>
 
                 {/* the modal we will use to upate notification content */}
@@ -191,7 +194,7 @@ export default function Admin() {
 
                         </TouchableOpacity>}
                 </View>
-            </ScrollView>
+            </ScrollView>}
         </View>
     )
 };
