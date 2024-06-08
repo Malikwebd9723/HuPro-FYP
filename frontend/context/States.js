@@ -15,6 +15,7 @@ const States = ({ children }) => {
     // all the states goes here
     const [notificationData, setNotificationData] = useState([]);
     const [registeredUsers, setRegisteredUsers] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
     const [applicantUsers, setApplicantUsers] = useState([]);
     const [profileData, setProfileData] = useState([])
     const [location, setLocation] = useState(false);
@@ -192,6 +193,7 @@ const States = ({ children }) => {
             const response = await fetch(`${homeHost}/getRegisteredUsers`)
             const json = await response.json();
             await setRegisteredUsers(json.data);
+            await setAllUsers(json.data);
         } catch (error) {
             ToastAndroid.show("Error while fetching registered users", ToastAndroid.LONG)
         }
@@ -250,7 +252,7 @@ const States = ({ children }) => {
     // search user function
     const searchUser = (text) => {
         if (text !== "") {
-            const filtered = registeredUsers.filter((user) =>
+            const filtered = allUsers.filter((user) =>
                 user.roll.includes(text)
             );
             setRegisteredUsers(filtered);
