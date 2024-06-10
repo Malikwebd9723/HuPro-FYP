@@ -83,7 +83,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-
   //   orders: [
   //     {
   //       type: mongoose.Schema.Types.ObjectId,
