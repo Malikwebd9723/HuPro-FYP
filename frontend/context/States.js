@@ -345,14 +345,14 @@ const States = ({ children }) => {
         }
     }
 
-    const handleCheckIn = async ({ id, date, latitude, longitude }) => {
+    const handleCheckIn = async ({ id,time, date, latitude, longitude }) => {
         try {
             const response = await fetch(`${homeHost}/checkIn`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ id, date, latitude, longitude })
+                body: JSON.stringify({ id,time, date, latitude, longitude })
             });
             const json = await response.json();
 
@@ -368,14 +368,14 @@ const States = ({ children }) => {
         }
     }
 
-    const handleCheckOut = async ({ id, date, latitude, longitude }) => {
+    const handleCheckOut = async ({ id,time, date, latitude, longitude }) => {
         try {
             const response = await fetch(`${homeHost}/checkOut`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ id, date, latitude, longitude })
+                body: JSON.stringify({ id,time, date, latitude, longitude })
             });
             const json = await response.json();
 

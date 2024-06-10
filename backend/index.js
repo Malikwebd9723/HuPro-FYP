@@ -383,12 +383,12 @@ app.post("/assignDuty", async (req, res) => {
 
 app.post("/checkIn", async (req, res) => {
     try {
-        const { id, date, latitude, longitude } = req.body;
+        const { id,time, date, latitude, longitude } = req.body;
         const user = await User.findOne({ _id: id });
         if (!user) {
             return res.status(401).json({ success: false, message: "Something went wrong!" })
         } else {
-            await user.updateOne({ $set: { checkIn: { date, latitude, longitude } } })
+            await user.updateOne({ $set: { checkIn: {time, date, latitude, longitude } } })
             await user.save();
             return res.status(200).json({ success: true, message: "CheckedIn Successfully!" })
         }
@@ -400,12 +400,12 @@ app.post("/checkIn", async (req, res) => {
 
 app.post("/checkOut", async (req, res) => {
     try {
-        const { id, date, latitude, longitude } = req.body;
+        const { id,time, date, latitude, longitude } = req.body;
         const user = await User.findOne({ _id: id });
         if (!user && user.checkIn == user.checkOut) {
             return res.status(401).json({ success: false, message: "Something went wrong!" })
         } else {
-            await user.updateOne({ $set: { checkOut: { date, latitude, longitude } } })
+            await user.updateOne({ $set: { checkOut: {time, date, latitude, longitude } } })
             await user.save();
             return res.status(200).json({ success: true, message: "CheckedOut Successfully!" })
         }

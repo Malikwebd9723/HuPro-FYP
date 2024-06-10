@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, FlatList, Alert, TextInput, VirtualizedList } from "react-native";
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Alert} from "react-native";
 import { useTheme } from "styled-components";
 import TopNav from "../components/TopNav";
 import { useEffect, useState, useContext } from "react";

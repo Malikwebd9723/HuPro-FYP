@@ -26,7 +26,10 @@ export default function User() {
 
   const getId = async () => {
     const userId = await AsyncStorage.getItem("user");
-    getProfileData(userId);
+    await getProfileData(userId);
+    await handleGetNotification();
+    await getLocation();
+    await getDateFromStrorage()
   }
 
   //  get today date
@@ -43,7 +46,7 @@ export default function User() {
       `Sure to CheckIn?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
+        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id,time:fullDate, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
     await AsyncStorage.setItem("checkInDate", date)
@@ -56,7 +59,7 @@ export default function User() {
       `Sure to CheckIn?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
+        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id,time:fullDate, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
     await AsyncStorage.setItem("checkOutDate", date)
@@ -71,10 +74,7 @@ export default function User() {
   }
 
   useEffect(() => {
-    handleGetNotification();
-    getLocation();
     getId();
-    getDateFromStrorage()
     setLoading(false);
   }, [])
 
