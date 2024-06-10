@@ -246,7 +246,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
     mainContainer: { padding: 10, paddingBottom: "20%", minHeight: "100%" },
     nameContainer: { marginVertical: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-    name: { flex: 1, fontSize: 20 },
+    name: { flex: 1, fontSize: 25 },
 
     updateBtn: { flex: 1, padding: 5, borderRadius: 10, margin: 10 },
 

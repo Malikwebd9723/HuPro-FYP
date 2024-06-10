@@ -101,6 +101,8 @@ const States = ({ children }) => {
             }
             else {
                 ToastAndroid.show(json.message, ToastAndroid.LONG)
+                const res = {success:false}
+                return res;
             }
 
         } catch (error) {
@@ -124,7 +126,7 @@ const States = ({ children }) => {
                 ToastAndroid.show(json.message, ToastAndroid.LONG);
             }
         } catch (error) {
-            ToastAndroid.show(error.message, ToastAndroid.LONG)
+            console.log(error.message);
         }
     }
 
@@ -183,7 +185,7 @@ const States = ({ children }) => {
             const json = await response.json();
             setNotificationData(json);
         } catch (error) {
-            ToastAndroid.show("Error while fetching notification", ToastAndroid.LONG)
+            console.log(error.message);
         }
     }
 
@@ -195,7 +197,7 @@ const States = ({ children }) => {
             await setRegisteredUsers(json.data);
             await setAllUsers(json.data);
         } catch (error) {
-            ToastAndroid.show("Error while fetching registered users", ToastAndroid.LONG)
+            console.log(error.message);
         }
     }
 
@@ -206,7 +208,7 @@ const States = ({ children }) => {
             const json = await response.json();
             await setApplicantUsers(json.data);
         } catch (error) {
-            ToastAndroid.show("Error while fetching applicants", ToastAndroid.LONG)
+            console.log(error.message);
         }
     }
 

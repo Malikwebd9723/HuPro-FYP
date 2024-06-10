@@ -50,10 +50,10 @@ export default function SuperAdmin() {
     useEffect(() => {
         const getId = async()=>{
             const userId = await AsyncStorage.getItem("user");
-            getProfileData(userId);
-            handleGetNotification();
-            getRegisteredUsers();
-            getApplicantUsers();
+             await getProfileData(userId);
+             await handleGetNotification();
+             await getRegisteredUsers();
+             await getApplicantUsers();
             setScreenLoad(false)
         }
         getId();

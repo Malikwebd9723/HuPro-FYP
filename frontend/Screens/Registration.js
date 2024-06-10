@@ -38,6 +38,16 @@ export default function Registration() {
             ToastAndroid.show("Fill all the fields correctly!", ToastAndroid.LONG)
         }
     }
+
+    
+    const emailValidator = () => {
+        // check if the email is valid using a regular expression
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const result = re.test(String(cred.email).toLowerCase());
+        return result;
+    }
+
+
     const handleRegister = async () => {
         setLoad(true);
         const userData = {
@@ -55,33 +65,39 @@ export default function Registration() {
 
         try {
 
-
-            const response = await fetch(`${homeHost}/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userData)
-            });
-            const json = await response.json();
-            if (json.success == true) {
-                setCred({
-                    fullname: "",
-                    fathername: "",
-                    email: "",
-                    gender: "",
-                    roll: "",
-                    department: "",
-                    semester: "",
-                    address: "",
-                    cnic: "",
-                    contact: ""
-                })
-                ToastAndroid.show(json.message, ToastAndroid.LONG)
-                setLoad(false)
-                navigation.navigate("Login")
+            const emailReturn = emailValidator()
+            if (emailReturn) {
+                const response = await fetch(`${homeHost}/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(userData)
+                });
+                const json = await response.json();
+                if (json.success == true) {
+                    setCred({
+                        fullname: "",
+                        fathername: "",
+                        email: "",
+                        gender: "",
+                        roll: "",
+                        department: "",
+                        semester: "",
+                        address: "",
+                        cnic: "",
+                        contact: ""
+                    })
+                    ToastAndroid.show(json.message, ToastAndroid.LONG)
+                    setLoad(false)
+                    navigation.navigate("Login")
+                } else {
+                    ToastAndroid.show(json.message, ToastAndroid.LONG)
+                    setLoad(false)
+                }
+                
             } else {
-                ToastAndroid.show(json.message, ToastAndroid.LONG)
+                ToastAndroid.show("Please enter valid email address!", ToastAndroid.LONG)
                 setLoad(false)
             }
 
@@ -103,7 +119,7 @@ export default function Registration() {
 
                     <Text style={[styles.h2, { color: colorDark }]}>Get yourself registered</Text>
                 </View>
-                {load ? <ActivityIndicator size={30} color={color}/> :
+                {load ? <ActivityIndicator size={30} color={color} /> :
                     <KeyboardAvoidingView >
                         <View style={[styles.secondContainer]}>
                             <Text style={styles.text}>Fill all the fields correctly, to avoid registeration failure!</Text>
