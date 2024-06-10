@@ -157,7 +157,7 @@ const States = ({ children }) => {
         await AsyncStorage.removeItem("authToken");
         await AsyncStorage.removeItem("privilege");
         await AsyncStorage.removeItem("user");
-        navigation.navigate("Login");
+        navigation.replace("Login");
     }
 
     // delete notification from database

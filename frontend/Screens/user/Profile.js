@@ -209,7 +209,7 @@ export default function Profile() {
 
                     <View style={[styles.detailsContainerInner]}>
                         <Text style={[styles.keys, { color }]}>Address:</Text>
-                        <TextInput multiline style={[styles.values, { backgroundColor: boxbg, color: colorDark }]}>{profileData.address}</TextInput>
+                        <Text multiline style={[styles.values, { backgroundColor: boxbg, color: colorDark }]}>{profileData.address}</Text>
                     </View>
 
 
@@ -235,7 +235,7 @@ export default function Profile() {
                     <TextInput onChangeText={(txt) => { setConfirmPwd(txt), setShowErr(false)}} value={confirmPwd} style={[styles.values, { backgroundColor: boxbg, color: colorDark }]} placeholder="Confirm new password!" />
                     {showErr && <Text style={[{ color: "red", paddingHorizontal: 15 }]}>Password does not match!</Text>
                     }
-                    <TouchableOpacity onPress={()=>callPasswordChange()} style={[styles.closeModalBtn, { backgroundColor: navBg, width: "30%", alignItems: "center" }]}><Text style={[styles.closeModalBtnText]}>Save</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>callPasswordChange()} style={[styles.closeModalBtn, { backgroundColor: navBg, width: "30%", alignItems: "center" }]}><Text style={[styles.closeModalBtnText]}>Update</Text></TouchableOpacity>
                 </View>
             </ScrollView>
         </View>

@@ -27,9 +27,7 @@ export default function User() {
   const getId = async () => {
     const userId = await AsyncStorage.getItem("user");
     await getProfileData(userId);
-    await handleGetNotification();
-    await getLocation();
-    await getDateFromStrorage()
+    setLoading(false);
   }
 
   //  get today date
@@ -39,14 +37,13 @@ export default function User() {
   const year = fullDate.getFullYear();
   const date = `${today},${month + 1},${year}`;
 
-
   const handleConfirmCheckIn = async () => {
     Alert.alert(
       'Confirmation',
       `Sure to CheckIn?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id,time:fullDate, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
+        { text: 'Yes', onPress: () => handleCheckIn({ id: profileData._id, time: fullDate.toLocaleString(), date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
     await AsyncStorage.setItem("checkInDate", date)
@@ -56,10 +53,10 @@ export default function User() {
   const handleConfirmCheckOut = async () => {
     Alert.alert(
       'Confirmation',
-      `Sure to CheckIn?`,
+      `Sure to CheckOut?`,
       [
         { text: 'No' },
-        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id,time:fullDate, date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
+        { text: 'Yes', onPress: () => handleCheckOut({ id: profileData._id, time: fullDate.toLocaleString(), date, latitude: location.coords.latitude, longitude: location.coords.longitude }) && getDateFromStrorage() },
       ]
     );
     await AsyncStorage.setItem("checkOutDate", date)
@@ -75,7 +72,9 @@ export default function User() {
 
   useEffect(() => {
     getId();
-    setLoading(false);
+    handleGetNotification();
+    getLocation(); 
+    getDateFromStrorage();
   }, [])
 
   return (
@@ -83,7 +82,7 @@ export default function User() {
       <View style={[Styles.mainContainer, { backgroundColor }]}>
         <TopNav text={"HuPro"} />
         {
-          loading ? <ActivityIndicator size={30} color={color} /> :
+          loading ? <View style={{ flex: 1, justifyContent: "center", backgroundColor }}><ActivityIndicator size={40} color={color} /></View> :
             <ScrollView>
               <Text style={[Styles.name, { color }]}>Greetings, {profileData.fullname}</Text>
 
@@ -109,7 +108,7 @@ export default function User() {
                   <View style={[Styles.dutyContainerInner, { backgroundColor: boxbg }]}>
                     <FontAwesome6 name="location-dot" size={25} color={color} />
                     {profileData.dutyPlace !== "" ?
-                      <Text style={[Styles.h3, { color }]}>{profileData.dutyPlace}</Text> :
+                      <Text style={[Styles.h3, { color }]}>{profileData.dutyPlace.toUpperCase()}</Text> :
                       <Text style={[Styles.h3, { color }]}>No duty assigned yet</Text>}
                   </View>
                 </View>
